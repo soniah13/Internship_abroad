@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from .models import Internship, Country
-from .serializers import InternshipSerializer, CountrySerializer
+from .serializers import InternshipSerializer, CountrySerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
 from rest_framework import generics, status
+from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 # Create your views here.
 
 @csrf_exempt
@@ -46,3 +50,21 @@ def country_describe(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class Create_User(generics.CreateAPIView):
+        queryset = User.objects.all()
+        serializer_class = UserSerializer
+        permission_classes = [AllowAny]
+
+class Login_user(ObtainAuthToken):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        user = token.user
+        return Response({
+            'token': token.key,
+            'user_id': user.id,
+            'username': user.username 
+            })
