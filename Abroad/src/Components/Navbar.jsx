@@ -1,29 +1,34 @@
-import React, { useState, useEffect } from 'react'; 
-import { Link, useNavigate } from 'react-router-dom';
+// src/Components/Navbar.js
+import React, { useState } from 'react'; 
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 
-function Navbar() {
+function Navbar({ isLoggedIn, setIsLoggedIn }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
     const navigate = useNavigate();
+    const location = useLocation();
+
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    // Check login status when the component mounts
-    useEffect(() => {
-        const token = localStorage.getItem('token'); // Adjust based on your auth logic
-        if (token) {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
     const handleLogout = () => {
-        localStorage.clear(); // Clear user data
-        setIsLoggedIn(false); // Update state
+        localStorage.removeItem('ACCESS_TOKEN');
+        localStorage.removeItem('REFRESH_TOKEN');
+        setIsLoggedIn(false);
         navigate('/login'); // Redirect to login page
     };
+
+
+    const getLinkClassName = (path) => {
+        const baseClass = 'block rounded-md px-3 py-2 mx-5 font-semibold';
+        const activeClass = 'text-blue-600';
+        const inactiveClass = 'hover:bg-grey-400 hover:text-black';
+
+        return location.pathname === path ? `${baseClass} ${activeClass}` : `${baseClass} ${inactiveClass}`;
+
+        };
 
     return (
         <>
@@ -32,8 +37,13 @@ function Navbar() {
                 {/* Logo on the left */}
                 <div className='pl-4'>
                     <Link to='/'>
-                        <Logo />
+                        <Logo/>
                     </Link>
+                </div>
+
+                <div className='hidden md:flex flex-grow justify-center font-semibold text-xl py-3 uppercase'>
+                    <Link to='/' className={getLinkClassName('/')}>HOME</Link>
+                    
                 </div>
 
                 {/* Burger menu icon for mobile */}
@@ -42,19 +52,19 @@ function Navbar() {
                 </div>
 
                 {/* Navigation Links (hidden on small screens) */}
-                <nav className='hidden md:flex font-semibold text-2xl py-3 uppercase space-x-4'>
-                    <Link to='/' className='hover:border-b border-3 border-black px-3'>Home</Link>
-                
-
+                <nav className='hidden md:flex font-semibold text-xl py-3 uppercase space-x-4'>
+                    
+                    
                     {/* Conditional rendering for login/register/logout */}
                     {isLoggedIn ? (
                         <>
-                        <Link to='/login' className='hover:border-b border-3 border-black px-3'>Login</Link>
-                        <Link to='/register' className='hover:border-b border-3 border-black px-3'>Register</Link>
+                            <Link to='/logout' onClick={handleLogout} className={getLinkClassName('/logout')}>LOGOUT</Link>
                         </>
                     ) : (
                         <>
-                            <Link to='/logout'onClick={handleLogout} className='hover:border-b border-3 border-black px-3' >Logout</Link>
+                        <button>
+                            <Link to='/login' className='bg-blue-600 text-white hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5 font-semibold '>LOGIN</Link>
+                        </button>
                         </>
                     )}
                 </nav>
@@ -62,20 +72,18 @@ function Navbar() {
 
             {/* Dropdown menu for mobile (visible when isDropdownOpen is true) */}
             {isDropdownOpen && (
-                <div className='md:hidden bg-gray-400 p-4'>
-                    <nav className='flex flex-col space-y-2 text-xl font-semibold'>
-                        <Link to='/' onClick={toggleDropdown} className='hover:border-b border-3 border-black'>Home</Link>
-        
-
+                <div className='md:hidden bg-blue-600 p-4'>
+                    <nav className='flex flex-col space-y-2 text-xl text-white text-center font-semibold'>
+                        <Link to='/' onClick={toggleDropdown} className='hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5'>HOME</Link>
+                        
                         {/* Conditional rendering for mobile */}
                         {isLoggedIn ? (
                             <>
-                            <Link to='/login' className='hover:border-b border-3 border-black px-3'>Login</Link>
-                            <Link to='/register' className='hover:border-b border-3 border-black px-3'>Register</Link>
+                                <Link to='/logout' onClick={handleLogout} className='hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5'>Logout</Link>
                             </>
                         ) : (
                             <>
-                                <Link to='/logout'onClick={handleLogout} className='hover:border-b border-3 border-black px-3' >Logout</Link>
+                                <Link to='/login' onClick={toggleDropdown} className='hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5'>Login</Link>
                             </>
                         )}
                     </nav>

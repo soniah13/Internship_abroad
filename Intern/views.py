@@ -15,8 +15,8 @@ from rest_framework.authtoken.models import Token
 @api_view(['GET', 'POST'])
 def internships_list(request):
     if request.method == 'GET':
-        major = request.Get.get('major', None)
-        continent = request.Get.get('continent', None)
+        major = request.GET.get('major', None)
+        continent = request.GET.get('continent', None)
         internships = Internship.objects.all()
         if major:
             internships = internships.filter(major_name__major_name__icontains=major)
@@ -56,15 +56,3 @@ class Create_User(generics.CreateAPIView):
         serializer_class = UserSerializer
         permission_classes = [AllowAny]
 
-class Login_user(ObtainAuthToken):
-    permission_classes = [AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        user = token.user
-        return Response({
-            'token': token.key,
-            'user_id': user.id,
-            'username': user.username 
-            })

@@ -1,9 +1,9 @@
-// Login.js
+// src/Components/Login.js
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
-function Login() {
+function Login({ setIsLoggedIn }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -14,23 +14,28 @@ function Login() {
         e.preventDefault();
 
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/user/login/", {
+            const res = await fetch("http://127.0.0.1:8000/api/token/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 }, 
-                body: JSON.stringify({username, password}),
+                body: JSON.stringify({ username, password }),
             });
             if (!res.ok) {
                 throw new Error('Network response was not okay');
             }
             const data = await res.json();
 
+            // Store tokens in localStorage
             localStorage.setItem(ACCESS_TOKEN, data.access);
             localStorage.setItem(REFRESH_TOKEN, data.refresh);
-            navigate("/");
+
+            // Update isLoggedIn state in App component
+            setIsLoggedIn(true);
+
+            navigate("/"); // Navigate to home after successful login
         } catch (error) {
-            alert(error);
+            alert(error.message || "An error occurred during login.");
         } finally {
             setLoading(false);
         }

@@ -1,6 +1,5 @@
-// Register.js
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
     const [username, setUsername] = useState("");
@@ -8,14 +7,17 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
+        setErrorMessage("");  // Clear previous error message
 
+        // Check if passwords match before making the request
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            setErrorMessage("Passwords do not match");
             setLoading(false);
             return;
         }
@@ -26,14 +28,25 @@ function Register() {
                 headers: {
                     'Content-Type': 'application/json',
                 }, 
-                body: JSON.stringify({ username, password, email }),
+                body: JSON.stringify({ 
+                    username, 
+                    password, 
+                    confirm_password: confirmPassword,  // Update field name
+                    email 
+                }),
             });
+            
             if (!res.ok) {
-                throw new Error('Network response was not okay');
+                // Fetch specific error messages if available
+                const data = await res.json();
+                setErrorMessage(data.detail || JSON.stringify(data)); // Display specific error
+                return;
             }
-            navigate("/login");
+            
+            navigate("/login");  // Navigate to login page upon success
+
         } catch (error) {
-            alert(error);
+            setErrorMessage("An error occurred during registration. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -42,6 +55,9 @@ function Register() {
     return (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-36">
             <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
+            {errorMessage && (
+                <p className="text-red-500 mb-4 text-center">{errorMessage}</p>
+            )}
             <input
                 className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                 type="text"
@@ -77,6 +93,9 @@ function Register() {
             >
                 {loading ? "Registering..." : "Register"}
             </button>
+            <p className="p-8 text-center font-semibold">
+                Already Registered? <span className="text-blue-500"><Link to='/login'>Login</Link></span>
+            </p>
         </form>
     );
 }
