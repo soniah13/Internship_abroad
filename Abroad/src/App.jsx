@@ -5,7 +5,9 @@ import Login from './Components/Login';
 import Register from './Components/Register';
 import Home from './Components/Home';
 import Navbar from './Components/Navbar';
-
+import Jobs from './Components/Jobs';
+import JobsDetails from './Components/JobsDetails';
+import PostJobs from './Components/PostJobs';
 
 function Logout() {
     localStorage.clear();
@@ -13,13 +15,26 @@ function Logout() {
 }
 
 function App() {
+    const [internships, setInternships] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('ACCESS_TOKEN'));
+    const [userType, setUserType] = useState(localStorage.getItem('userType') || 'student');
+
+    useEffect(() => {
+        const storedUserType = localStorage.getItem('userType');
+        if (storedUserType) {
+            setUserType(storedUserType);
+        }
+    }, []);
+
+    const handleUserChange = (newUserType) => {
+        setUserType(newUserType);
+        localStorage.setItem('userType', newUserType);
+    };
 
     const checkLoginStatus = () => {
         setIsLoggedIn(!!localStorage.getItem('ACCESS_TOKEN'));
     };
 
-    // Update login status on localStorage changes
     useEffect(() => {
         window.addEventListener('storage', checkLoginStatus);
         return () => {
@@ -29,10 +44,17 @@ function App() {
 
     return (
         <BrowserRouter>
-            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userType={userType} />
             
             <Routes>
-                <Route path='/' element={<Home />} />
+                <Route path='/' element={<Home setUserType={handleUserChange} />} />
+                {userType === 'student' && isLoggedIn && (
+                    <Route path='/jobs' element={<Jobs internships={internships} setInternships={setInternships} />} />
+                )}
+                {userType === 'employer' && isLoggedIn && (
+                    <Route path='/post-jobs' element={<PostJobs internships={internships} setInternships={setInternships} />} />
+                )}
+                <Route path='/internship/:id/' element={<JobsDetails/>} />
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path='/logout' element={<Logout />} />
                 <Route path='/register' element={<Register />} />

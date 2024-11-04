@@ -17,6 +17,7 @@ import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import os
 
 load_dotenv()
 
@@ -35,12 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-cloudinary.config( 
-  cloud_name = "ddqkfdqy8", 
-  api_key = "637138692528623", 
-  api_secret = "OgL-pPuhtTuDdd2Mqq39Aeq2LNg",
-  secure = True
-)
+
 
 
 # Application definition
@@ -55,7 +51,18 @@ INSTALLED_APPS = [
     'Intern',
     'rest_framework',
     'corsheaders',
+    'cloudinary_storage',
+    'cloudinary'
 ]
+
+cloudinary.config( 
+  cloud_name = "ddqkfdqy8", 
+  api_key = "637138692528623", 
+  api_secret = "OgL-pPuhtTuDdd2Mqq39Aeq2LNg",
+  secure = True
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -167,3 +174,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

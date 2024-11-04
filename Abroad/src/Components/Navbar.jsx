@@ -1,17 +1,14 @@
 // src/Components/Navbar.js
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 
-function Navbar({ isLoggedIn, setIsLoggedIn }) {
+function Navbar({ isLoggedIn, setIsLoggedIn, userType }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
     const handleLogout = () => {
         localStorage.removeItem('ACCESS_TOKEN');
@@ -20,52 +17,42 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
         navigate('/login'); // Redirect to login page
     };
 
+    const getLinkClassName = (path) =>
+        location.pathname === path
+            ? 'block rounded-md px-3 mx-5 font-semibold text-blue-600'
+            : 'block rounded-md px-3 mx-5 font-semibold hover:bg-gray-400 hover:text-black';
 
-    const getLinkClassName = (path) => {
-        const baseClass = 'block rounded-md px-3 py-2 mx-5 font-semibold';
-        const activeClass = 'text-blue-600';
-        const inactiveClass = 'hover:bg-grey-400 hover:text-black';
-
-        return location.pathname === path ? `${baseClass} ${activeClass}` : `${baseClass} ${inactiveClass}`;
-
-        };
+    
 
     return (
         <>
             {/* Navbar container */}
-            <div className='flex justify-between items-center m-0 p-0 border border-solid border-2'>
+            <div className='flex justify-between items-center border sticky top-0 bg-white shadow-md z-50 p-4'>
                 {/* Logo on the left */}
                 <div className='pl-4'>
                     <Link to='/'>
-                        <Logo/>
+                        <Logo />
                     </Link>
                 </div>
 
-                <div className='hidden md:flex flex-grow justify-center font-semibold text-xl py-3 uppercase'>
+                {/* Center links for large screens */}
+                <nav className='hidden md:flex justify-center font-semibold text-xl'>
                     <Link to='/' className={getLinkClassName('/')}>HOME</Link>
-                    
-                </div>
+                    {userType === 'student' && <Link to='/jobs' className={getLinkClassName('/jobs')}>INTERNSHIPS</Link>}
+                    {userType === 'employer' && <Link to='/post-jobs' className={getLinkClassName('/post-jobs')}>POST INTERNSHIP</Link>}
+                </nav>
 
                 {/* Burger menu icon for mobile */}
-                <div className='md:hidden pr-4 cursor-pointer'>
-                    <i className='fas fa-bars' onClick={toggleDropdown} style={{ fontSize: '28px' }}></i>
+                <div className='md:hidden pr-4 cursor-pointer' onClick={toggleDropdown}>
+                    <i className='fas fa-bars text-2xl'></i>
                 </div>
 
-                {/* Navigation Links (hidden on small screens) */}
-                <nav className='hidden md:flex font-semibold text-xl py-3 uppercase space-x-4'>
-                    
-                    
-                    {/* Conditional rendering for login/register/logout */}
+                {/* Right links for large screens */}
+                <nav className='hidden md:flex font-semibold text-xl uppercase space-x-4'>
                     {isLoggedIn ? (
-                        <>
-                            <Link to='/logout' onClick={handleLogout} className={getLinkClassName('/logout')}>LOGOUT</Link>
-                        </>
+                        <Link to='/logout' onClick={handleLogout} className={getLinkClassName('/logout')}>LOGOUT</Link>
                     ) : (
-                        <>
-                        <button>
-                            <Link to='/login' className='bg-blue-600 text-white hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5 font-semibold '>LOGIN</Link>
-                        </button>
-                        </>
+                        <Link to='/login' className='bg-blue-600 text-white hover:bg-gray-400 hover:text-black rounded-md px-3 py-2 font-semibold'>LOGIN</Link>
                     )}
                 </nav>
             </div>
@@ -74,17 +61,13 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
             {isDropdownOpen && (
                 <div className='md:hidden bg-blue-600 p-4'>
                     <nav className='flex flex-col space-y-2 text-xl text-white text-center font-semibold'>
-                        <Link to='/' onClick={toggleDropdown} className='hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5'>HOME</Link>
-                        
-                        {/* Conditional rendering for mobile */}
+                        <Link to='/' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>HOME</Link>
+                        {userType === 'student' && <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>}
+                        {userType === 'employer' && <Link to='/post-jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>POST INTERNSHIP</Link>}
                         {isLoggedIn ? (
-                            <>
-                                <Link to='/logout' onClick={handleLogout} className='hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5'>Logout</Link>
-                            </>
+                            <Link to='/logout' onClick={handleLogout} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>LOGOUT</Link>
                         ) : (
-                            <>
-                                <Link to='/login' onClick={toggleDropdown} className='hover:bg-grey-400 hover:text-black block rounded-md px-3  py-2 mx-5'>Login</Link>
-                            </>
+                            <Link to='/login' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>LOGIN</Link>
                         )}
                     </nav>
                 </div>
