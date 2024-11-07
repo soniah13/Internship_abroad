@@ -16,7 +16,7 @@ function LostPage() {
         <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{ backgroundImage: "url(/src/assets/Images/home.jpg)" }}>
             <div className='absolute inset-0 bg-black opacity-50'></div>
             <div className='relative z-10 text-center text-white p-6'>
-                <h1 className='text-4xl md:text-5xl font-bold mb-4 sm:text-2xl'>Access Denied</h1>
+                <h1 className='text-4xl md:text-5xl font-bold mb-4 sm:text-2xl'>404 PAGE!<br/> <span className='text-green-400 px-6'> YOU WERE LOST BUT NOW ARE FOUND</span></h1>
                 <p className='text-2xl md:text-xl mb-8 font-semibold'>
                     Please Log in or Register to explore the website and access all features!
                 </p>

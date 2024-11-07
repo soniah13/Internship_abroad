@@ -49,7 +49,7 @@ function App() {
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} handleUserChange={handleUserChange} />} />
                 <Route path='/logout' element={<Logout />} />
                 <Route path='/register' element={<Register />} />
-                <Route path='/lost' element={<LostPage/>} />
+                <Route path='*' element={<LostPage/>} />
             </Routes>
         </BrowserRouter>
     );

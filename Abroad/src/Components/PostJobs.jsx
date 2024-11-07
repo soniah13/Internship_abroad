@@ -85,8 +85,9 @@ function PostJobs() {
   };
 
   return (
-    <div className='w-full h-full' style={{ backgroundImage: "url('/src/assets/Images/lost.jpg')" }}>
-      <form onSubmit={handleSubmit} className='max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-36'>
+    <div className='relative flex justify-center items-center  w-full h-screen pt-6 bg-cover bg-center' style={{ backgroundImage: "url('/src/assets/Images/lost.jpg')" }}>
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <form onSubmit={handleSubmit} className='z-10 max-w-screen-md mx-full bg-white p-8 rounded-lg shadow-lg mt-36'>
         <h2 className='text-center font-bold text-2xl mb-3'>POST AN INTERNSHIP</h2>
         
         {/* Row 1 */}
@@ -107,14 +108,7 @@ function PostJobs() {
             required
             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
-          <input
-            type='text'
-            name='country'
-            placeholder='Country located?'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
+          
           <input
             type='text'
             name='continent'
@@ -139,96 +133,8 @@ function PostJobs() {
             required
             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
-          <input
-            type='text'
-            name='major_name'
-            placeholder='What is the required major'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          <input
-            type='text'
-            name='sub_major'
-            placeholder='What other major are required'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-        </div>
+          
 
-        {/* Row 2 */}
-        <div className='flex flex-col gap-4 mt-4'>
-          <select
-            name='education_level'
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          >
-            <option value="bachelor's degree" className='text-center font-semibold'>Bachelor's Degree</option>
-            <option value="master's degree" className='text-center font-semibold'>Master's Degree</option>
-            <option value="PhD" className='text-center font-semibold'>PhD Degree</option>
-            <option value="Associate certificate" className='text-center font-semibold'>Associate Certificate</option>
-          </select>
-
-          <h3 className='text-lg font-semibold'>Requirements</h3>
-          <label>About the Job:</label>
-          <textarea
-            name='about_job'
-            placeholder='Describe the job and the company'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          
-          <label>Qualifications:</label>
-          <textarea
-            name='qualifications'
-            placeholder='List the qualifications'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          
-          <label>Responsibilities:</label>
-          <textarea
-            name='responsibilities'
-            placeholder='List responsibilities'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          
-          <label>What is required:</label>
-          <textarea
-            name='required'
-            placeholder='List requirements'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          
-          <input
-            type='datetime-local'
-            name='application_deadline'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          <input
-            type='date'
-            name='posted_date'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
-          <input
-            type='file'
-            name='company_logo'
-            accept='image/*'
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
         </div>
 
         <button type='submit' className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 mt-4">Post Internship</button>
