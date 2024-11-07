@@ -1,9 +1,6 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 
-class Major(models.Model):
-    major_name = models.CharField(max_length=200)
-    sub_major = models.CharField(max_length=200)
 
 class Country(models.Model):
     CONTINENTS = [
@@ -33,13 +30,18 @@ class Internship(models.Model):
     title = models.CharField(max_length=200)
     company_name = models.CharField(max_length=200)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    picture = CloudinaryField(default='picture')
     city = models.CharField(max_length=100)
     duration = models.PositiveIntegerField()
-    major_name = models.ForeignKey(Major, on_delete=models.CASCADE, null=True, blank=True)
+    majors = models.TextField(default='list of majors expected')
     education_level = models.CharField(max_length=50, choices=EDUCATION_LEVEL, default="bachelor's degree")
-    requirements = models.TextField()
+    job_description = models.TextField(default='describe th job details')
+    about_company = models.TextField(default='say something about company')
+    qualifications = models.TextField(default='minimum qualifications')
+    benefits = models.TextField(default='what does the student gain?')
+    responsibilities = models.TextField(default='in charge of?')
     application_deadline = models.DateTimeField()
-    posted_date = models.DateField()
+    posted_date = models.DateTimeField(auto_now_add=True)
     company_logo = CloudinaryField(default = 'company_logo')
     
 

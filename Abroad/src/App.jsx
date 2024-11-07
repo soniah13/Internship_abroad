@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Components/Login';
@@ -8,6 +7,8 @@ import Navbar from './Components/Navbar';
 import Jobs from './Components/Jobs';
 import JobsDetails from './Components/JobsDetails';
 import PostJobs from './Components/PostJobs';
+import ProtectedRoute from './Components/ProtectedRoute';
+import LostPage from './Components/LostPage';
 
 function Logout() {
     localStorage.clear();
@@ -45,19 +46,15 @@ function App() {
     return (
         <BrowserRouter>
             <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userType={userType} />
-            
             <Routes>
                 <Route path='/' element={<Home setUserType={handleUserChange} />} />
-                {userType === 'student' && isLoggedIn && (
-                    <Route path='/jobs' element={<Jobs internships={internships} setInternships={setInternships} />} />
-                )}
-                {userType === 'employer' && isLoggedIn && (
-                    <Route path='/post-jobs' element={<PostJobs internships={internships} setInternships={setInternships} />} />
-                )}
-                <Route path='/internship/:id/' element={<JobsDetails/>} />
-                <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+                <Route path='/jobs' element={<ProtectedRoute> <Jobs internships={internships} setInternships={setInternships} isLoggedIn={isLoggedIn} /></ProtectedRoute>} />
+                <Route path='/post-jobs' element={<PostJobs internships={internships} setInternships={setInternships} />} />
+                <Route path='/internship/:id/' element={<JobsDetails />} />
+                <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} handleUserChange={handleUserChange} />} />
                 <Route path='/logout' element={<Logout />} />
                 <Route path='/register' element={<Register />} />
+                <Route path='/lost' element={<LostPage/>} />
             </Routes>
         </BrowserRouter>
     );

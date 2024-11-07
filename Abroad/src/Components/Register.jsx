@@ -53,7 +53,9 @@ function Register() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-36">
+        <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{backgroundImage: "url(/src/assets/Images/home.jpg)"}}>
+            <div className="absolute inset-0 bg-black opacity-50"></div>   
+        <form onSubmit={handleSubmit} className="z-10 max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-36">
             <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
             {errorMessage && (
                 <p className="text-red-500 mb-4 text-center">{errorMessage}</p>
@@ -97,6 +99,7 @@ function Register() {
                 Already Registered? <span className="text-blue-500"><Link to='/login'>Login</Link></span>
             </p>
         </form>
+        </div>
     );
 }
 

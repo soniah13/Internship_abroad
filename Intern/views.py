@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Internship, Country, Major
-from .serializers import InternshipSerializer, CountrySerializer, UserSerializer, MajorSerializer
+from .models import Internship, Country
+from .serializers import InternshipSerializer, CountrySerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
@@ -15,11 +15,8 @@ from rest_framework.permissions import AllowAny
 @api_view(['GET', 'POST'])
 def internships_list(request):
     if request.method == 'GET':
-        major = request.GET.get('major', None)
         continent = request.GET.get('continent', None)
         internships = Internship.objects.all()
-        if major:
-            internships = internships.filter(major_name__major_name__icontains=major)
         if continent:
             internships = internships.filter(country__continent__icontains=continent)
         serializer = InternshipSerializer(internships, many=True)
@@ -28,6 +25,9 @@ def internships_list(request):
             if internship.get('company_logo'):
                 internship['company_logo'] = base_url + internship['company_logo']
                 #print(internship['company_logo'])
+        for internship in serializer.data:
+            if internship.get('picture'):
+                internship['picture'] = base_url + internship['picture']
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request == 'POST':
@@ -70,20 +70,5 @@ class Create_User(generics.CreateAPIView):
         serializer_class = UserSerializer
         permission_classes = [AllowAny]
 
-@api_view(['GET', 'POST'])
-def Majors_list(request):
-    if request.method == 'GET':
-        majors = Major.objects.all()
-        serializer = MajorSerializer(majors, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request == 'POST':
-        serializer = MajorSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
-class majorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Major.objects.all()
-    serializer_class = MajorSerializer
 

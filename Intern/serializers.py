@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Internship, Country, Major
+from .models import Internship, Country
 from django.contrib.auth.models import User
 
 class InternshipSerializer(serializers.ModelSerializer):
@@ -12,10 +12,6 @@ class CountrySerializer(serializers.ModelSerializer):
         model = Country
         fields = '__all__'
 
-class MajorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Major
-        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)

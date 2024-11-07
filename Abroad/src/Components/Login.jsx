@@ -1,12 +1,12 @@
-// src/Components/Login.js
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
-function Login({ setIsLoggedIn }) {
+function Login({ setIsLoggedIn, handleUserChange }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [userType, setUserType] = useState('student');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -33,6 +33,9 @@ function Login({ setIsLoggedIn }) {
             // Update isLoggedIn state in App component
             setIsLoggedIn(true);
 
+            //update user type
+            handleUserChange(userType);
+
             navigate("/"); // Navigate to home after successful login
         } catch (error) {
             alert(error.message || "An error occurred during login.");
@@ -42,22 +45,23 @@ function Login({ setIsLoggedIn }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-36">
+        <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{backgroundImage: "url(/src/assets/Images/home.jpg)"}}>
+            <div className="absolute inset-0 bg-black opacity-50"></div>
+        <form onSubmit={handleSubmit} className="z-10 max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-36">
             <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
             <input
                 className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
+                type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"
             />
             <input
                 className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-            />
+                type="password" value={password} onChange={(e) => setPassword(e.target.value)}  placeholder="Password" />
+            <select className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500" 
+            value={userType} onChange={(e) => setUserType(e.target.value)}>
+
+                <option value='student'>Student</option>
+                <option value='employer'>Employer</option>
+            </select>
             <p className="p-8 font-semibold">
                 Not Registered? <span className="text-blue-500"><Link to='/register'>Register</Link></span>
             </p>
@@ -69,6 +73,7 @@ function Login({ setIsLoggedIn }) {
                 {loading ? "Logging in..." : "Login"}
             </button>
         </form>
+        </div>
     );
 }
 
