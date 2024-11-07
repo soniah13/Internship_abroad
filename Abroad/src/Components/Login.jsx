@@ -21,14 +21,14 @@ function Login({ setIsLoggedIn, handleUserChange }) {
                 }, 
                 body: JSON.stringify({ username, password }),
             });
-            if (!res.ok) {
+            if (!res.ok) 
                 throw new Error('Network response was not okay');
-            }
-            const data = await res.json();
+                const data = await res.json();
 
             // Store tokens in localStorage
             localStorage.setItem(ACCESS_TOKEN, data.access);
             localStorage.setItem(REFRESH_TOKEN, data.refresh);
+            localStorage.setItem('userType', userType);
 
             // Update isLoggedIn state in App component
             setIsLoggedIn(true);

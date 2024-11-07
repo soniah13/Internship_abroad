@@ -9,6 +9,7 @@ import JobsDetails from './Components/JobsDetails';
 import PostJobs from './Components/PostJobs';
 import ProtectedRoute from './Components/ProtectedRoute';
 import LostPage from './Components/LostPage';
+import { ACCESS_TOKEN } from './constants';
 
 function Logout() {
     localStorage.clear();
@@ -20,11 +21,14 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('ACCESS_TOKEN'));
     const [userType, setUserType] = useState(localStorage.getItem('userType') || 'student');
 
+    //sync login state with localstorage
+    const checkLoginStatus = () => {
+        setIsLoggedIn(!!localStorage.getItem('ACCESS_TOKEN'));
+    };
+
     useEffect(() => {
-        const storedUserType = localStorage.getItem('userType');
-        if (storedUserType) {
-            setUserType(storedUserType);
-        }
+       window.addEventListener('storage', checkLoginStatus);
+       return () => window.removeEventListener('storage', checkLoginStatus);
     }, []);
 
     const handleUserChange = (newUserType) => {
@@ -32,24 +36,15 @@ function App() {
         localStorage.setItem('userType', newUserType);
     };
 
-    const checkLoginStatus = () => {
-        setIsLoggedIn(!!localStorage.getItem('ACCESS_TOKEN'));
-    };
-
-    useEffect(() => {
-        window.addEventListener('storage', checkLoginStatus);
-        return () => {
-            window.removeEventListener('storage', checkLoginStatus);
-        };
-    }, []);
+   
 
     return (
         <BrowserRouter>
             <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userType={userType} />
             <Routes>
                 <Route path='/' element={<Home setUserType={handleUserChange} />} />
-                <Route path='/jobs' element={<ProtectedRoute> <Jobs internships={internships} setInternships={setInternships} isLoggedIn={isLoggedIn} /></ProtectedRoute>} />
-                <Route path='/post-jobs' element={<PostJobs internships={internships} setInternships={setInternships} />} />
+                <Route path='/jobs' element={<ProtectedRoute  isLoggedIn={isLoggedIn}><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
+                <Route path='/post-jobs' element={<ProtectedRoute  isLoggedIn={isLoggedIn}><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/internship/:id/' element={<JobsDetails />} />
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} handleUserChange={handleUserChange} />} />
                 <Route path='/logout' element={<Logout />} />
