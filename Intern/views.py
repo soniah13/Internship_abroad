@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Internship, Country, Application
+from .models import Internship, Country, Application, UserProfile
 from .serializers import InternshipSerializer, CountrySerializer, UserSerializer, ApplicationSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view
@@ -67,7 +67,7 @@ class countryRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CountrySerializer
     
 class Create_User(generics.CreateAPIView):
-        queryset = User.objects.all()
+        queryset = UserProfile.objects.all()
         serializer_class = UserSerializer
         permission_classes = [AllowAny]
 

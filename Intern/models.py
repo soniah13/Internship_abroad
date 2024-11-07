@@ -1,5 +1,6 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 class Country(models.Model):
@@ -51,7 +52,7 @@ class Internship(models.Model):
         return self.title
     
 class Application(models.Model):
-    Internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
+    internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
     applicant_name = models.CharField(max_length=100)
     applicant_email = models.EmailField()
     max_applications = models.PositiveIntegerField(default=15)
@@ -61,7 +62,7 @@ class Application(models.Model):
     
 
     def __str__(self):
-        return f"{self.applicant_name} - {self.Internship.title}"
+        return f"{self.applicant_name} - {self.internship.title}"
 
 def increment_application_count(sender, instance, created, **kwargs):
     if created:
@@ -73,9 +74,19 @@ def decrement_application_count(sender, instance, created, **kwargs):
         instance.internship.application_count -= 1
         instance.internship.save()
     
+class UserProfile(AbstractUser):
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('employer', 'Employer'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
+    groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="customeruser_permissions_set", blank=True)
+
+    def __str__(self):
+        return f"{self.username} ({self.role})"
     
-
 
 # Create your models here.
 

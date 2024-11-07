@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Internship, Country, Application
-from django.contrib.auth.models import User
+from .models import Internship, Country, Application, UserProfile
+from django.contrib.auth import get_user_model
 
 class InternshipSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,9 +21,10 @@ class ApplicationSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True)
+    role = serializers.ChoiceField(choices=UserProfile.ROLE_CHOICES)
     class Meta:
-        model = User
-        fields = ['id', 'username', 'password','confirm_password', 'email']
+        model = get_user_model()
+        fields = ['id', 'username', 'password','confirm_password', 'email', 'role']
         extra_kwargs = {
             'password': {'write_only': True},
             'confirm_password': {'write_only': True},  
@@ -36,9 +37,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('confirm_password')
-        user = User.objects.create_user(
+        user = get_user_model().objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
-            email=validated_data['email']
+            email=validated_data['email'],
+            role=validated_data['role']
         )  
         return user
