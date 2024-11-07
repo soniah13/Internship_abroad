@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from .models import Internship, Country
-from .serializers import InternshipSerializer, CountrySerializer, UserSerializer
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import Internship, Country, Application
+from .serializers import InternshipSerializer, CountrySerializer, UserSerializer, ApplicationSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
@@ -70,5 +71,21 @@ class Create_User(generics.CreateAPIView):
         serializer_class = UserSerializer
         permission_classes = [AllowAny]
 
+def submit_applications(request, internship_id):
+    internship = get_object_or_404(Internship, id=internship_id)
+
+    if internship.reached_application_limit():
+        return JsonResponse({'error': 'Maximum application limit reached for this internship'}, status=400)
+    
+    serializer = ApplicationSerializer(data=request.data)
+    if serializer.is_valid():
+
+        serializer.save(internship=internship)
+
+        internship.applicant_count += 1
+        internship.save()
+
+        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

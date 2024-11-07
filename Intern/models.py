@@ -43,10 +43,35 @@ class Internship(models.Model):
     application_deadline = models.DateTimeField()
     posted_date = models.DateTimeField(auto_now_add=True)
     company_logo = CloudinaryField(default = 'company_logo')
+    applicant_count = models.PositiveIntegerField(default=0)
+    standard_image = CloudinaryField(default='https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png')
     
 
     def __str__(self):
         return self.title
+    
+class Application(models.Model):
+    Internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
+    applicant_name = models.CharField(max_length=100)
+    applicant_email = models.EmailField()
+    max_applications = models.PositiveIntegerField(default=15)
+
+    def reached_application_limit(self):
+        return self.application_count >= self.max_applications
+    
+
+    def __str__(self):
+        return f"{self.applicant_name} - {self.Internship.title}"
+
+def increment_application_count(sender, instance, created, **kwargs):
+    if created:
+        instance.internship.application_count += 1
+        instance.internship.save()
+
+def decrement_application_count(sender, instance, created, **kwargs):
+    if created:
+        instance.internship.application_count -= 1
+        instance.internship.save()
     
 
     
