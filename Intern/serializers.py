@@ -1,6 +1,8 @@
+from typing import Any, Dict
 from rest_framework import serializers
 from .models import Internship, Country, Application, UserProfile
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class InternshipSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,3 +46,11 @@ class UserSerializer(serializers.ModelSerializer):
             role=validated_data['role']
         )  
         return user
+    
+class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
+    role = serializers.CharField(source='user.role', read_only=True)
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['role'] = self.user.role
+        return data

@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import  {jwtDecode}  from "jwt-decode";
 import api from "../api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN, ROLE } from "../constants";
 import { useState, useEffect } from "react";
 
 
@@ -47,7 +47,8 @@ function ProtectedRoute({ children, requiredRole }) {
         if (tokenExpiration < now) {
             await refreshToken();
         } else {
-            if (requiredRole && decoded.role !== requiredRole){
+            const storedRole = localStorage.getItem(ROLE);
+            if (requiredRole && storedRole !== requiredRole){
                 setIsAuthorized(false);
             }else{
                 setIsAuthorized(true);

@@ -18,13 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from Intern.views import RegistrationView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from Intern.serializers import LoginTokenObtainPairSerializer
+
+class LoginTokenObtainPairView(TokenObtainPairView):
+    serializer_class = LoginTokenObtainPairSerializer
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(), name='access_token'),
+    path('api/token/', LoginTokenObtainPairView.as_view(), name='access_token'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/', include('Intern.urls')),
     path('api/user/register/', RegistrationView.as_view(), name='register'),
     
 ]
+
+
