@@ -6,6 +6,7 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [role, setRole] = useState("student")
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
@@ -32,7 +33,8 @@ function Register() {
                     username, 
                     password, 
                     confirm_password: confirmPassword,  // Update field name
-                    email 
+                    email,
+                    role 
                 }),
             });
             
@@ -88,6 +90,11 @@ function Register() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm Password"
             />
+            <select value={role} onChange={(e) => setRole(e.target.value)}
+                className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                <option value='student'>Student</option>
+                <option value="employer">Employer</option>
+            </select>
             <button
                 className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300"
                 type="submit"

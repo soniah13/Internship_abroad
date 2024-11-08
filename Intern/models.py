@@ -84,6 +84,12 @@ class UserProfile(AbstractUser):
     groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name="customeruser_permissions_set", blank=True)
 
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    bio = models.TextField(blank=True)
+    location = models.CharField(blank=True)
+    education = models.CharField(max_length=150, default='university of')
+    profile_picture = CloudinaryField(default='profile picture')
+
     def __str__(self):
         return f"{self.username} ({self.role})"
     

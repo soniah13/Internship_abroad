@@ -2,11 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
-function Login({ setIsLoggedIn, handleUserChange }) {
+function Login({ setIsLoggedIn, role }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [userType, setUserType] = useState('student');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -28,14 +27,9 @@ function Login({ setIsLoggedIn, handleUserChange }) {
             // Store tokens in localStorage
             localStorage.setItem(ACCESS_TOKEN, data.access);
             localStorage.setItem(REFRESH_TOKEN, data.refresh);
-            localStorage.setItem('userType', userType);
-
-            // Update isLoggedIn state in App component
+            localStorage.setItem('role', data.role);
+            
             setIsLoggedIn(true);
-
-            //update user type
-            handleUserChange(userType);
-
             navigate("/"); // Navigate to home after successful login
         } catch (error) {
             alert(error.message || "An error occurred during login.");
@@ -56,12 +50,6 @@ function Login({ setIsLoggedIn, handleUserChange }) {
             <input
                 className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                 type="password" value={password} onChange={(e) => setPassword(e.target.value)}  placeholder="Password" />
-            <select className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500" 
-            value={userType} onChange={(e) => setUserType(e.target.value)}>
-
-                <option value='student'>Student</option>
-                <option value='employer'>Employer</option>
-            </select>
             <p className="p-8 font-semibold">
                 Not Registered? <span className="text-blue-500"><Link to='/register'>Register</Link></span>
             </p>

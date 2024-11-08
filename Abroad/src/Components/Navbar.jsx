@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 
-function Navbar({ isLoggedIn, setIsLoggedIn, userType }) {
+function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,10 +34,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn, userType }) {
                 {/* Center links for large screens */}
                 <nav className='hidden md:flex justify-center font-semibold text-xl'>
                     <Link to='/' className={getLinkClassName('/')}>HOME</Link>
-                    {isLoggedIn && userType === 'student' && (
+                    {isLoggedIn && role === 'student' && (
                         <Link to='/jobs' className={getLinkClassName('/jobs')}>INTERNSHIPS</Link>
                     )}
-                    {isLoggedIn && userType === 'employer' && (
+                    {isLoggedIn && role === 'employer' && (
                         <Link to='/post-jobs' className={getLinkClassName('/post-jobs')}>POST INTERNSHIP</Link>
                     )}
                 </nav>
@@ -62,10 +62,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn, userType }) {
                 <div className='md:hidden bg-blue-600 p-4'>
                     <nav className='flex flex-col space-y-2 text-xl text-white text-center font-semibold'>
                         <Link to='/' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>HOME</Link>
-                        {isLoggedIn && userType === 'student' && (
+                        {isLoggedIn && role === 'student' && (
                             <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>
                         )}
-                        {isLoggedIn && userType === 'employer' && (
+                        {isLoggedIn && role === 'employer' && (
                             <Link to='/post-jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>POST INTERNSHIP</Link>
                         )}
                         {isLoggedIn ? (

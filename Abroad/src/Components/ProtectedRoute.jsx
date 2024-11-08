@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { useState, useEffect } from "react";
 
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, requiredRole }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
@@ -47,7 +47,12 @@ function ProtectedRoute({ children }) {
         if (tokenExpiration < now) {
             await refreshToken();
         } else {
-            setIsAuthorized(true);
+            if (requiredRole && decoded.role !== requiredRole){
+                setIsAuthorized(false);
+            }else{
+                setIsAuthorized(true);
+            }
+            
         }
     };
 

@@ -19,7 +19,7 @@ function Logout() {
 function App() {
     const [internships, setInternships] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('ACCESS_TOKEN'));
-    const [userType, setUserType] = useState(localStorage.getItem('userType') || 'student');
+    
 
     //sync login state with localstorage
     const checkLoginStatus = () => {
@@ -31,22 +31,19 @@ function App() {
        return () => window.removeEventListener('storage', checkLoginStatus);
     }, []);
 
-    const handleUserChange = (newUserType) => {
-        setUserType(newUserType);
-        localStorage.setItem('userType', newUserType);
-    };
+    const role = localStorage.getItem('role');
 
    
 
     return (
         <BrowserRouter>
-            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userType={userType} />
+            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} role={role} />
             <Routes>
-                <Route path='/' element={<Home setUserType={handleUserChange} />} />
-                <Route path='/jobs' element={<ProtectedRoute  isLoggedIn={isLoggedIn}><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
-                <Route path='/post-jobs' element={<ProtectedRoute  isLoggedIn={isLoggedIn}><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
+                <Route path='/' element={<Home  />} />
+                <Route path='/jobs' element={<ProtectedRoute  isLoggedIn={isLoggedIn} requiredRole='student' ><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
+                <Route path='/post-jobs' element={<ProtectedRoute  isLoggedIn={isLoggedIn} requiredRole='employer'><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/internship/:id/' element={<JobsDetails />} />
-                <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} handleUserChange={handleUserChange} />} />
+                <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path='/logout' element={<Logout />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='*' element={<LostPage/>} />

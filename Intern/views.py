@@ -1,13 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Internship, Country, Application, UserProfile
-from .serializers import InternshipSerializer, CountrySerializer, UserSerializer, ApplicationSerializer
+from .models import Internship, Country, UserProfile
+from .serializers import InternshipSerializer, CountrySerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import  api_view
+from rest_framework.decorators import  api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import generics, status
-from django.contrib.auth.models import User
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 # Create your views here.
@@ -62,30 +61,69 @@ def country_describe(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    
+    
 class countryRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     
-class Create_User(generics.CreateAPIView):
-        queryset = UserProfile.objects.all()
-        serializer_class = UserSerializer
-        permission_classes = [AllowAny]
+class RegistrationView(generics.CreateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
-def submit_applications(request, internship_id):
-    internship = get_object_or_404(Internship, id=internship_id)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-    if internship.reached_application_limit():
-        return JsonResponse({'error': 'Maximum application limit reached for this internship'}, status=400)
+        user = serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            {
+                'user':{
+                    'id':user.id,
+                    'username': user.username,
+                    'role':user.role,
+                    'email':user.email,
+                }, 'message': 'user registered successfully',
+            }, status=status.HTTP_201_CREATED,
+            headers=headers
+        )
+
+@api_view(['GET'])
+@permission_classes(['IsAuthenticated'])
+def student_profile(request):
+    if request.user.role != 'student':
+        return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
     
-    serializer = ApplicationSerializer(data=request.data)
-    if serializer.is_valid():
+    return Response({
+        'username':request.user.username,
+        'email':request.user.email,
+        'bio':request.user.bio,
+        'location':request.user.location,
+        'education':request.user.education,
+        'profile_picture':request.user.profile_picture.url,
+    })
 
-        serializer.save(internship=internship)
+@api_view(['GET'])
+@permission_classes(['IsAuthenticated'])
+def employer_profile(request):
+    if request.user.role != 'employer':
+        return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
+    
+    return Response({
+        'username':request.user.username,
+        'email':request.user.email,
+        'bio':request.user.bio,
+        'location':request.user.location,
+        'education':request.user.education,
+        'profile_picture':request.user.profile_picture.url,
+    })
 
-        internship.applicant_count += 1
-        internship.save()
 
-        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
 
