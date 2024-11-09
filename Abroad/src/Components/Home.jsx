@@ -85,7 +85,7 @@ function Home({setUserType}) {
       };
   
       return (
-          <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/src/assets/Images/lost.jpg)' }}>
+          <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/src/assets/Images/lost.png)' }}>
               <div className="absolute inset-0 bg-black opacity-50"></div>
               <div className="flex flex-col md:flex-row justify-center items-center h-1/2 p-4 md:p-48 space-y-1 md:space-y-0 md:space-x-4">
                   <div className="grid grid-cols-6 md:grid-cols-6 gap-x-0 gap-y-0 justify-center md:w-1/2">
