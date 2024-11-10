@@ -30,7 +30,7 @@ def internships_list(request):
                 internship['picture'] = base_url + internship['picture']
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    elif request == 'POST':
+    elif request.method == 'POST':
         serializer = InternshipSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -90,7 +90,7 @@ class RegistrationView(generics.CreateAPIView):
             headers=headers
         )
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def student_profile(request):
     if request.user.role != 'student':
@@ -103,6 +103,8 @@ def student_profile(request):
             'location':request.user.location,
             'education':request.user.education,
             'profile_picture':request.user.profile_picture.url,
+            'username':request.user.username,
+            'email':request.user.email,
         }
         return Response(student_data)
     elif request.method == 'POST':

@@ -58,9 +58,9 @@ class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
 class EmployerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'bio', 'profile_picture', 'location' ]
+        fields = [ 'phone_number', 'bio', 'profile_picture', 'location' ]
 
 class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'bio', 'location', 'education', 'profile_picture']
+        fields = ['phone_number', 'bio', 'location', 'education', 'profile_picture', 'email', 'username']

@@ -73,8 +73,14 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                 <div className='md:hidden bg-blue-600 p-4'>
                     <nav className='flex flex-col space-y-2 text-xl text-white text-center font-semibold items-center justify-center'>
                     {isLoggedIn && role === 'student' && (
-                        <Link to='/student-profile' className='hover:text-blue-600'><IoPersonCircleOutline size={24}/></Link>
-                        )}
+                    <Link 
+                        to='/student-profile' 
+                        className='flex items-center justify-center space-x-2 text-gray-100 hover:text-blue-900 transition-colors duration-300'
+                    >
+                        <IoPersonCircleOutline size={24} />
+                        <span className='text-center text-sm'>Profile</span>
+                    </Link>
+                    )}
                         <Link to='/' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>HOME</Link>
                         {isLoggedIn && role === 'student' && (
                             <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>

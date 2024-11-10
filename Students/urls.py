@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/v1/', include('Intern.urls')),
     path('api/user/register/', RegistrationView.as_view(), name='register'),
     
+    
 ]
 
 
