@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Internship, Country, UserProfile
-from .serializers import InternshipSerializer, CountrySerializer, UserSerializer
+from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view, permission_classes
 from rest_framework.response import Response
@@ -91,38 +91,50 @@ class RegistrationView(generics.CreateAPIView):
         )
 
 @api_view(['GET'])
-@permission_classes(['IsAuthenticated'])
+@permission_classes([IsAuthenticated])
 def student_profile(request):
     if request.user.role != 'student':
         return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
     
-    return Response({
-        'username':request.user.username,
-        'email':request.user.email,
-        'bio':request.user.bio,
-        'location':request.user.location,
-        'education':request.user.education,
-        'profile_picture':request.user.profile_picture.url,
-    })
+    if request.method == 'GET':
+        student_data = {
+            'phone_number':request.user.phone_number,
+            'bio':request.user.bio,
+            'location':request.user.location,
+            'education':request.user.education,
+            'profile_picture':request.user.profile_picture.url,
+        }
+        return Response(student_data)
+    elif request.method == 'POST':
+        serializer = StudentProfileSerializer(data= request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
-@permission_classes(['IsAuthenticated'])
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def employer_profile(request):
     if request.user.role != 'employer':
         return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
     
-    return Response({
-        'username':request.user.username,
-        'email':request.user.email,
-        'bio':request.user.bio,
-        'location':request.user.location,
-        'education':request.user.education,
-        'profile_picture':request.user.profile_picture.url,
-    })
-
-
-
-
+    if request.method == 'GET':
+        employer_data = {
+            'username':request.user.username,
+            'email':request.user.email,
+            'bio':request.user.bio,
+            'location':request.user.location,
+            'education':request.user.education,
+            'profile_picture':request.user.profile_picture.url,
+        }
+        return Response(employer_data)
+    elif request.method == 'POST':
+        serializer = EmployerProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 

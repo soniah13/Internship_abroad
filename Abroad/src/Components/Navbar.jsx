@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -18,7 +19,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
     const getLinkClassName = (path) =>
         location.pathname === path
             ? 'block rounded-md px-3 mx-5 font-semibold text-blue-600'
-            : 'block rounded-md px-3 mx-5 font-semibold hover:bg-gray-400 hover:text-black';
+            : 'block rounded-md px-3 mx-5 font-semibold hover:bg-blue-400 hover:text-black';
 
     return (
         <>
@@ -32,11 +33,21 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                 </div>
 
                 {/* Center links for large screens */}
-                <nav className='hidden md:flex justify-center font-semibold text-xl'>
+                <nav className='hidden md:flex justify-center  font-semibold text-xl'>
                     <Link to='/' className={getLinkClassName('/')}>HOME</Link>
                     {isLoggedIn && role === 'student' && (
                         <Link to='/jobs' className={getLinkClassName('/jobs')}>INTERNSHIPS</Link>
                     )}
+                    {isLoggedIn && role === 'student' && (
+                    <Link 
+                        to='/student-profile' 
+                        className='flex items-center justify-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-300'
+                    >
+                        <IoPersonCircleOutline size={24} />
+                        <span className='text-center text-sm'>Profile</span>
+                    </Link>
+                    )}
+
                     {isLoggedIn && role === 'employer' && (
                         <Link to='/post-jobs' className={getLinkClassName('/post-jobs')}>POST INTERNSHIP</Link>
                     )}
@@ -60,7 +71,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
             {/* Dropdown menu for mobile (visible when isDropdownOpen is true) */}
             {isDropdownOpen && (
                 <div className='md:hidden bg-blue-600 p-4'>
-                    <nav className='flex flex-col space-y-2 text-xl text-white text-center font-semibold'>
+                    <nav className='flex flex-col space-y-2 text-xl text-white text-center font-semibold items-center justify-center'>
+                    {isLoggedIn && role === 'student' && (
+                        <Link to='/student-profile' className='hover:text-blue-600'><IoPersonCircleOutline size={24}/></Link>
+                        )}
                         <Link to='/' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>HOME</Link>
                         {isLoggedIn && role === 'student' && (
                             <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>

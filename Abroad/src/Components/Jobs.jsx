@@ -65,8 +65,8 @@ function Jobs({internships = [], setInternships}) {
     }
   return (
     <>
-    <div className='w-full h-screen relative'>
-        <img src="/src/assets/Images/jobs.png" alt="advertisement image" className='object-cover w-full h-full'/>
+    <div className='w-full h-96 relative'>
+        <img src="/src/assets/Images/jobs.png" alt="advertisement image" className='object-cover w-full h-96'/>
         <div className='absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50'>
             <h2 className='text-white font-semibold text-5xl text-center p-5'>
                 Kickstart your global internship journey today!
@@ -84,8 +84,7 @@ function Jobs({internships = [], setInternships}) {
             </div>
         </div>
     </div>
-    <div className='mt-16 mx-10'>
-        <h2 className='text-2xl font-bold mb-4'>Here are your results</h2>
+    <div className='mt-16 mx-5'>
         <InternshipList internships={filteredInternships} onImageClick={handleClick} />
     </div>
       

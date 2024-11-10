@@ -3,11 +3,13 @@ import InternCard from './InternCard'
 
 function InternshipList({internships, onImageClick}) {
   return (
-    <div className='grid grid-cols- sm:grid-cols-3 lg:grid-cols-4 gap-4 '>
+    <div className="flex justify-center">
+    <div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4'>
         {internships.map((internship) => (
             <InternCard key={internship.id}  internship={internship} onImageClick={onImageClick} />
         ))}
       
+    </div>
     </div>
   )
 }

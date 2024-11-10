@@ -9,6 +9,7 @@ import JobsDetails from './Components/JobsDetails';
 import PostJobs from './Components/PostJobs';
 import ProtectedRoute from './Components/ProtectedRoute';
 import LostPage from './Components/LostPage';
+import StudentProfile from './Components/StudentProfile';
 import { ACCESS_TOKEN , ROLE} from './constants';
 
 function Logout() {
@@ -42,6 +43,7 @@ function App() {
             <Routes>
                 <Route path='/' element={<Home  />} />
                 <Route path='/jobs' element={<ProtectedRoute  requiredRole='student' ><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
+                <Route path='/student-profile' element={<ProtectedRoute  requiredRole='student' ><StudentProfile/></ProtectedRoute>} />
                 <Route path='/post-jobs' element={<ProtectedRoute  requiredRole='employer'><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/internship/:id/' element={<JobsDetails />} />
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
