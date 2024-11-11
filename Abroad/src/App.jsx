@@ -11,6 +11,7 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import LostPage from './Components/LostPage';
 import StudentProfile from './Components/StudentProfile';
 import { ACCESS_TOKEN , ROLE} from './constants';
+import EmployerJobs from '../../Intern/EmployerJobs';
 
 function Logout() {
     localStorage.clear();
@@ -45,6 +46,7 @@ function App() {
                 <Route path='/jobs' element={<ProtectedRoute  requiredRole='student' ><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/student-profile' element={<ProtectedRoute  requiredRole='student' ><StudentProfile/></ProtectedRoute>} />
                 <Route path='/post-jobs' element={<ProtectedRoute  requiredRole='employer'><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
+                <Route path='/employer-jobs' element={<ProtectedRoute  requiredRole='employer'><EmployerJobs /></ProtectedRoute>} />
                 <Route path='/internship/:id/' element={<JobsDetails />} />
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path='/logout' element={<Logout />} />

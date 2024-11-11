@@ -20,6 +20,25 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
+    
+class UserProfile(AbstractUser):
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('employer', 'Employer'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="customeruser_permissions_set", blank=True)
+
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    bio = models.TextField(blank=True)
+    location = models.CharField(blank=True)
+    education = models.CharField(max_length=150, default='university of')
+    profile_picture = CloudinaryField(default='profile picture')
+
+    def __str__(self):
+        return f"{self.username} ({self.role})"
 
 class Internship(models.Model):
     EDUCATION_LEVEL = [
@@ -45,6 +64,7 @@ class Internship(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True)
     company_logo = CloudinaryField(default = 'company_logo')
     applicant_count = models.PositiveIntegerField(default=0)
+    employer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='internships',  blank=True, null=True)
     standard_image = CloudinaryField(default='https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png')
     
 
@@ -53,6 +73,7 @@ class Internship(models.Model):
     
 class Application(models.Model):
     internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
+    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, limit_choices_to={'role': 'student'}, blank=True, null=True)
     applicant_name = models.CharField(max_length=100)
     applicant_email = models.EmailField()
     max_applications = models.PositiveIntegerField(default=15)
@@ -74,24 +95,7 @@ def decrement_application_count(sender, instance, created, **kwargs):
         instance.internship.application_count -= 1
         instance.internship.save()
     
-class UserProfile(AbstractUser):
-    ROLE_CHOICES = [
-        ('student', 'Student'),
-        ('employer', 'Employer'),
-    ]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
-    groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
-    user_permissions = models.ManyToManyField(Permission, related_name="customeruser_permissions_set", blank=True)
-
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    bio = models.TextField(blank=True)
-    location = models.CharField(blank=True)
-    education = models.CharField(max_length=150, default='university of')
-    profile_picture = CloudinaryField(default='profile picture')
-
-    def __str__(self):
-        return f"{self.username} ({self.role})"
     
 
 # Create your models here.

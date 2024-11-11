@@ -17,7 +17,7 @@ class CountrySerializer(serializers.ModelSerializer):
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model: Application
-        fields = ['id', 'internship', 'applicant_name', 'applicant_email']
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -64,3 +64,4 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['phone_number', 'bio', 'location', 'education', 'profile_picture', 'email', 'username']
+       

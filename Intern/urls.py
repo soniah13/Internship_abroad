@@ -8,6 +8,7 @@ urlpatterns = [
     path('countries/<int:pk>/', countryRetrieveUpdateDestroy.as_view(), name='country_id'),
     path('profile/student/', student_profile, name='student_profile'),
     path('profile/employer/', employer_profile, name='employer_profile'),
+    path('employer/jobs/', employer_job_list, name='employer_jobs'),
     
     
     

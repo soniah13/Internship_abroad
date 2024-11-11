@@ -2,35 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IoPerson } from "react-icons/io5";
 import { FaLocationDot } from 'react-icons/fa6';
 
-function ProfileView({onEdit}) {
-  const [profileData, setProfileData] = useState({});
-
-  useEffect (() => {
-    const fetchProfile = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${localStorage.getItem('access')}`);
-
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/profile/student/', requestOptions);
-      if(response.ok) {
-        const result = await response.json();
-        setProfileData(result);
-        
-      } else {
-        console.error('Failed to fetch profile data', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error fetching profile data', error);
-    }
-    }; 
-    fetchProfile();
-  }, []);
+function ProfileView({profileData, onEdit}) {
 
   return (
     <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{backgroundImage: "url(/src/assets/Images/home.jpg)"}}>

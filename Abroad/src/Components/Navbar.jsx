@@ -51,6 +51,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                     {isLoggedIn && role === 'employer' && (
                         <Link to='/post-jobs' className={getLinkClassName('/post-jobs')}>POST INTERNSHIP</Link>
                     )}
+                    {isLoggedIn && role === 'employer' && (
+                        <Link to='/employer-jobs' className={getLinkClassName('/employer-jobs')}>POSTED JOBS</Link>
+                    )}
+                    
                 </nav>
 
                 {/* Burger menu icon for mobile */}
@@ -87,6 +91,9 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                         )}
                         {isLoggedIn && role === 'employer' && (
                             <Link to='/post-jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>POST INTERNSHIP</Link>
+                        )}
+                        {isLoggedIn && role === 'employer' && (
+                            <Link to='/employer-jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>POSTED JOBS</Link>
                         )}
                         {isLoggedIn ? (
                             <Link to='/logout' onClick={handleLogout} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>LOGOUT</Link>
