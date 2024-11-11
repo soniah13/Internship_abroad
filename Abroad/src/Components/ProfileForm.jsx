@@ -4,6 +4,8 @@ import { IoPerson } from "react-icons/io5";
 
 function ProfileForm() {
   const [profileData, setProfileData] = useState({
+    username:'',
+    email:'',
     phone_number : '',
     bio: '',
     location: '',
@@ -27,10 +29,12 @@ function ProfileForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const {phone_number, bio, location, education,profile_picture} = profileData;
+    const {username, email, phone_number, bio, location, education,profile_picture} = profileData;
   
     try {
       const formData = new FormData();
+      formData.append('username', username);
+      formData.append('email', email);
       formData.append('phone_number', phone_number);
       formData.append('bio', bio);
       formData.append('location', location);
@@ -51,6 +55,8 @@ function ProfileForm() {
       }
       console.log('Profile updated successfully');
       setProfileData({
+        username:'',
+        email:'',
         phone_number: '',
         bio: '',
         location: '',
@@ -80,6 +86,10 @@ function ProfileForm() {
           )}
           <input type='file' name='profile_picture' onChange={handleFileChange} className='mt-3'></input>
         </div>
+        <input type='text' name='username' placeholder='Username' value={profileData.username}
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        <input type='text' name='email' placeholder='Email' value={profileData.email}
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
         <input type='text' name='phone_number' placeholder='Phone Number' value={profileData.phone_number}
         onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
         <input type='text' name='bio' placeholder='Something cool about you' value={profileData.bio}

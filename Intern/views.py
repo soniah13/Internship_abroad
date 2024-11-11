@@ -90,7 +90,7 @@ class RegistrationView(generics.CreateAPIView):
             headers=headers
         )
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def student_profile(request):
     if request.user.role != 'student':
@@ -107,7 +107,7 @@ def student_profile(request):
             'email':request.user.email,
         }
         return Response(student_data)
-    elif request.method == 'POST':
+    elif request.method == 'PUT':
         serializer = StudentProfileSerializer(data= request.data)
         if serializer.is_valid():
             serializer.save()
