@@ -138,28 +138,42 @@ def employer_profile(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def employer_job_list(request):
     if request.user.role != 'employer':
         return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
-    jobs = Internship.objects.filter(employer=request.user)
-    job_count = jobs.count()
-    job_data = []
-    for job in jobs: 
-        applications = Application.objects.filter(internships=job)
-        application_count = applications.count()
+    
+    if request.method == 'GET':
+        jobs = Internship.objects.filter(employer=request.user)
+        job_count = jobs.count()
+        job_data = []
+    
+        for job in jobs: 
+            applications = Application.objects.filter(internships=job)
+            application_count = applications.count()
 
-        job_data.append({
-            'job': InternshipSerializer(job).data,
-            'application_count':application_count,
-            'applications':ApplicationSerializer(applications, many=True).data
-
-        })
+            job_data.append({
+                'job': InternshipSerializer(job).data,
+                'application_count': application_count,
+                'applications': ApplicationSerializer(applications, many=True).data
+            })
+    
         return Response({
-            'job_count':job_count,
-            'jobs':job_data
+            'job_count': job_count,
+            'jobs': job_data
         }, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        serializer = InternshipSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.validated_data['employer'] = request.user
+            internship = serializer.save()
+
+            return Response({
+                'message': 'Job posted Successfully!',
+                'job': InternshipSerializer(internship).data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

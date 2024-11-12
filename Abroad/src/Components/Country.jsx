@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
+import JobPost from './JobPost';
 
 function Country({ onComplete }) {
   const [formData, setFormData] = useState({
     name: '',
     flag: null,
     continent: '',
-    
   });
 
   const [errors, setErrors] = useState({});
+  const [showJobPostForm, setShowJobPostForm] = useState(false);
+  const [countryId, setCountryId] = useState(null);
+
   const CONTINENTS = [
     'Africa',
     'Asia',
     'Europe',
-    'North-America',
-    'South-America',
+    'North-america',
+    'South-america',
     'Australia',
-    'Antarctica'
+    'Antarctica',
   ];
 
   const handleChange = (e) => {
@@ -41,14 +44,17 @@ function Country({ onComplete }) {
       const response = await fetch('http://127.0.0.1:8000/api/v1/countries/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
         },
         body: formDataToSend,
       });
+
       if (response.ok) {
-        onComplete();
+        const responseData = await response.json();
+        setCountryId(responseData.id);
+        setShowJobPostForm(true);
         setFormData({
-          title: '',
+          name: '',
           continent: '',
           flag: null,
         });
@@ -62,6 +68,10 @@ function Country({ onComplete }) {
       setErrors({ global: 'An unexpected error occurred. Please try again.' });
     }
   };
+
+  if (showJobPostForm) {
+    return <JobPost onComplete={() => setShowJobPostForm(false)} countryId={countryId} />;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
@@ -99,12 +109,11 @@ function Country({ onComplete }) {
         type="file"
         name="flag"
         onChange={handleFileChange}
-        placeholder='flag image'
+        placeholder="flag image"
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
         required
       />
       {errors.flag && <p className="text-red-500 mb-4">{errors.flag}</p>}
-
 
       <button type="submit" className="bg-blue-600 hover:bg-blue-300 text-white font-semibold py-2 px-8 rounded items-center justify-center w-full text-2xl mt-4">
         Submit Job country

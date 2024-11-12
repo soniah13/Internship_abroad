@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function JobPost({ onComplete }) {
+function JobPost({ countryId }) {
   const [formData, setFormData] = useState({
     title: '',
     company_name: '',
-    country: '',
+    country: countryId || '',
     city: '',
     duration: '',
     majors: '',
@@ -20,12 +21,21 @@ function JobPost({ onComplete }) {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
   const EDUCATION_LEVELS = [
     "associate certificate",
     "bachelor's degree",
     "master's degree",
-    "PhD degree",
+    "Phd degree",
   ];
+
+  useEffect(() => {
+
+    const savedCountryId = localStorage.getItem('countryId');
+    if(savedCountryId) {
+      setFormData((prev) => ({ ...prev, country: savedCountryId}));
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,42 +50,61 @@ function JobPost({ onComplete }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const isConfirmed = window.confirm('Are you sure the job is ready to be submitted? Once submitted you will not be able to edit!');
+    if (!isConfirmed) return;
+
     const formDataToSend = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/internships/', {
+      const intenshipsResponse = await fetch('http://127.0.0.1:8000/api/v1/internships/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access')}`,
         },
         body: formDataToSend,
       });
-      if (response.ok) {
-        onComplete();
-        setFormData({
-          title: '',
-          company_name: '',
-          country: '',
-          city: '',
-          duration: '',
-          majors: '',
-          education_level: "bachelor's degree",
-          job_description: '',
-          about_company: '',
-          qualifications: '',
-          benefits: '',
-          responsibilities: '',
-          application_deadline: '',
-          company_logo: null,
-          standard_image: null,
+
+      if (intenshipsResponse.ok) {
+        const employerJobResponse = await fetch ("http://127.0.0.1:8000/api/v1/employer/jobs/", {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+          }, 
+          body: formDataToSend,
         });
-        setErrors({});
-      } else {
-        const errorData = await response.json();
-        setErrors(errorData);
+
+        if (employerJobResponse.ok) {
+          alert ('Internship Job has been added successfully!');
+          navigate('/employer-jobs')
+          setFormData({
+            title: '',
+            company_name: '',
+            country: '',
+            city: '',
+            duration: '',
+            majors: '',
+            education_level: "bachelor's degree",
+            job_description: '',
+            about_company: '',
+            qualifications: '',
+            benefits: '',
+            responsibilities: '',
+            application_deadline: '',
+            company_logo: null,
+            standard_image: null,
+          });
+          setErrors({});
+        } else {
+          const employerJobError = await employerJobResponse.json();
+          setErrors(employerJobError);
+        }
+       
+      }else {
+        const internshipsError = await intenshipsResponse.json();
+        setErrors(internshipsError);
       }
     } catch (error) {
       console.error('Error submitting form:', error);

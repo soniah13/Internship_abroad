@@ -45,17 +45,17 @@ function EmployerJobs() {
       <div className='w-full lg:w-4/5 bg-gray-100 shadow-lg rounded-md p-4 sm:p-6 lg:p-8 space-y-4'>
       {jobData.length > 0 ? (
         jobData.map((job) => (
-          <div key={job.id} className="job-card">
-            <h3>{job.title}</h3>
+          <div key={job.id} className="job-card p-4 bg-white shadow rounded-lg mb-4">
+            <h3 className='text-2xl font-semibold'>{job.title}</h3>
             <p>City: {job.city}</p>
             <p>Applicants Required: {job.max_applications}</p>
             <p>Applicants Applied: {job.applicant_count}</p>
-            <button onClick={() => handlePreview(job.id)}>Preview Job</button>
-            <button onClick={() => handleViewApplications(job.id)}>View Applications</button>
+            <button onClick={() => handlePreview(job.id)} className='bg-blue-600 hover:bg-green-600 text-white px-4 py-2 rounded'>Preview Job</button>
+            <button onClick={() => handleViewApplications(job.id)} className='bg-green-600 hover:bg-blue-60 text-white px-4 py-2 rounded'>View Applications</button>
           </div>
         ))
       ) : (
-        <p>No jobs posted yet.</p>
+        <p className='text-2xl font-bold text-center'>No jobs posted yet.</p>
       )}
       </div>
       </div>

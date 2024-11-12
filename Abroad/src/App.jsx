@@ -11,7 +11,8 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import LostPage from './Components/LostPage';
 import StudentProfile from './Components/StudentProfile';
 import { ACCESS_TOKEN , ROLE} from './constants';
-import EmployerJobs from '../../Intern/EmployerJobs';
+import EmployerJobs from './Components/EmployerJobs';
+
 
 function Logout() {
     localStorage.clear();

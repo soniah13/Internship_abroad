@@ -7,11 +7,11 @@ class Country(models.Model):
     CONTINENTS = [
         ('Asia', 'ASIA'),
         ('Africa', 'AFRICA'),
-        ('australia', 'AUSTRALIA'),
-        ('antarctica', 'ANTARCTICA'),
-        ('europe', 'EUROPE'),
-        ('north_america', 'NORTH_AMERICA'),
-        ('south_america', 'SOUTH_AMERICA'),
+        ('Australia', 'AUSTRALIA'),
+        ('Antarctica', 'ANTARCTICA'),
+        ('Europe', 'EUROPE'),
+        ('North-america', 'NORTH_AMERICA'),
+        ('South-america', 'SOUTH_AMERICA'),
         
     ]
     name = models.CharField(max_length=100)
