@@ -16,8 +16,9 @@ function JobPost({ countryId }) {
     benefits: '',
     responsibilities: '',
     application_deadline: '',
+    applicant_count: '',
     company_logo: null,
-    standard_image: null,
+    standard_image: 'https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png',
   });
 
   const [errors, setErrors] = useState({});
@@ -93,8 +94,9 @@ function JobPost({ countryId }) {
             benefits: '',
             responsibilities: '',
             application_deadline: '',
+            applicant_count: '',
             company_logo: null,
-            standard_image: null,
+            standard_image: 'https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png',
           });
           setErrors({});
         } else {
@@ -216,7 +218,35 @@ function JobPost({ countryId }) {
       />
       {errors.about_company && <p className="text-red-500 mb-4">{errors.about_company}</p>}
 
-      {/* Repeat similar structure for qualifications, benefits, responsibilities */}
+      <textarea
+        name="responsibilities"
+        placeholder="What are the responsibilities"
+        value={formData.responsibilities}
+        onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        required
+      />
+      {errors.responsibilities && <p className="text-red-500 mb-4">{errors.responsibilities}</p>}
+
+      <textarea
+        name="qualifications"
+        placeholder="What kind of student ae you looking for?"
+        value={formData.qualifications}
+        onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        required
+      />
+      {errors.qualifications && <p className="text-red-500 mb-4">{errors.qualifications}</p>}
+
+      <textarea
+        name="benefits"
+        placeholder="what does the student benefit? "
+        value={formData.benefits}
+        onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        required
+      />
+      {errors.benefits && <p className="text-red-500 mb-4">{errors.benefits}</p>}
       
       <input
         type="datetime-local"
@@ -229,6 +259,17 @@ function JobPost({ countryId }) {
       {errors.application_deadline && <p className="text-red-500 mb-4">{errors.application_deadline}</p>}
 
       <input
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        type="number"
+        name="applicant_count"
+        placeholder="How many applications needed"
+        value={formData.applicant_count}
+        onChange={handleChange}
+        
+      />
+      {errors.applicant_count && <p className="text-red-500 mb-4">{errors.applicant_count}</p>}
+
+      <input
         type="file"
         name="company_logo"
         onChange={handleFileChange}
@@ -236,6 +277,7 @@ function JobPost({ countryId }) {
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
         required
       />
+      <p className="text-gray-900"> Please add company logo image </p>
       {errors.company_logo && <p className="text-red-500 mb-4">{errors.company_logo}</p>}
 
 

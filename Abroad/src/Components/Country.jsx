@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import JobPost from './JobPost';
 
-function Country({ onComplete }) {
+function Country() {
   const [formData, setFormData] = useState({
     name: '',
     flag: null,
@@ -97,6 +97,7 @@ function Country({ onComplete }) {
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
         required
       >
+        <option value="" disabled>Select Continent</option>
         {CONTINENTS.map((level) => (
           <option key={level} value={level}>
             {level}
@@ -113,6 +114,7 @@ function Country({ onComplete }) {
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
         required
       />
+      <p className='text-gray-500 text-sm mt-1'> please add a flag image </p>
       {errors.flag && <p className="text-red-500 mb-4">{errors.flag}</p>}
 
       <button type="submit" className="bg-blue-600 hover:bg-blue-300 text-white font-semibold py-2 px-8 rounded items-center justify-center w-full text-2xl mt-4">

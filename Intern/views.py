@@ -150,7 +150,7 @@ def employer_job_list(request):
         job_data = []
     
         for job in jobs: 
-            applications = Application.objects.filter(internships=job)
+            applications = Application.objects.filter(internship=job)
             application_count = applications.count()
 
             job_data.append({
@@ -163,6 +163,7 @@ def employer_job_list(request):
             'job_count': job_count,
             'jobs': job_data
         }, status=status.HTTP_200_OK)
+    
     elif request.method == 'POST':
         serializer = InternshipSerializer(data=request.data)
         if serializer.is_valid():
