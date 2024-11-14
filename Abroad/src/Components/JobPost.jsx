@@ -18,6 +18,7 @@ function JobPost({ countryId }) {
     application_deadline: '',
     applicant_count: '',
     company_logo: null,
+    picture: null,
     standard_image: 'https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png',
   });
 
@@ -96,6 +97,7 @@ function JobPost({ countryId }) {
             application_deadline: '',
             applicant_count: '',
             company_logo: null,
+            picture: null,
             standard_image: 'https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png',
           });
           setErrors({});
@@ -122,73 +124,43 @@ function JobPost({ countryId }) {
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"
-        name="title"
-        value={formData.title}
-        onChange={handleChange}
-        placeholder="Job Title"
+        type="text"  name="title"  value={formData.title}  onChange={handleChange}  placeholder="Job Title"
       />
       {errors.title && <p className="text-red-500 mb-4">{errors.title}</p>}
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"
-        name="company_name"
-        value={formData.company_name}
-        onChange={handleChange}
-        placeholder="Name of your Company"
+        type="text"  name="company_name"  value={formData.company_name}  onChange={handleChange}  placeholder="Name of your Company"
       />
       {errors.company_name && <p className="text-red-500 mb-4">{errors.company_name}</p>}
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"
-        name="country"
-        placeholder="Country"
-        value={formData.country}
-        onChange={handleChange}
-        required
+        type="text"  name="country"  placeholder="Country"  value={formData.country}  onChange={handleChange}  required
       />
       {errors.country && <p className="text-red-500 mb-4">{errors.country}</p>}
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"
-        name="city"
-        placeholder="City"
-        value={formData.city}
-        onChange={handleChange}
-        required
+        type="text"  name="city"  placeholder="City"  value={formData.city}  onChange={handleChange}  required
       />
       {errors.city && <p className="text-red-500 mb-4">{errors.city}</p>}
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="number"
-        name="duration"
-        placeholder="Duration (months)"
-        value={formData.duration}
-        onChange={handleChange}
-        required
+        type="number"  name="duration"  placeholder="Duration (months)"  value={formData.duration}  onChange={handleChange}  required
       />
       {errors.duration && <p className="text-red-500 mb-4">{errors.duration}</p>}
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"
-        name="majors"
-        placeholder="Majors"
-        value={formData.majors}
-        onChange={handleChange}
+        type="text"  name="majors"  placeholder="Majors"  value={formData.majors}  onChange={handleChange}
       />
       {errors.majors && <p className="text-red-500 mb-4">{errors.majors}</p>}
 
       <select
-        name="education_level"
-        value={formData.education_level}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        name="education_level"  value={formData.education_level}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       >
         {EDUCATION_LEVELS.map((level) => (
           <option key={level} value={level}>
@@ -199,83 +171,57 @@ function JobPost({ countryId }) {
       {errors.education_level && <p className="text-red-500 mb-4">{errors.education_level}</p>}
 
       <textarea
-        name="job_description"
-        placeholder="Job Description"
-        value={formData.job_description}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        name="job_description"  placeholder="Job Description"  value={formData.job_description}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       {errors.job_description && <p className="text-red-500 mb-4">{errors.job_description}</p>}
 
       <textarea
-        name="about_company"
-        placeholder="About the Company"
-        value={formData.about_company}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        name="about_company"  placeholder="About the Company"  value={formData.about_company}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       {errors.about_company && <p className="text-red-500 mb-4">{errors.about_company}</p>}
 
       <textarea
-        name="responsibilities"
-        placeholder="What are the responsibilities"
-        value={formData.responsibilities}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        name="responsibilities"  placeholder="What are the responsibilities"  value={formData.responsibilities}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       {errors.responsibilities && <p className="text-red-500 mb-4">{errors.responsibilities}</p>}
 
       <textarea
-        name="qualifications"
-        placeholder="What kind of student ae you looking for?"
-        value={formData.qualifications}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        name="qualifications"  placeholder="What kind of student ae you looking for?"  value={formData.qualifications}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       {errors.qualifications && <p className="text-red-500 mb-4">{errors.qualifications}</p>}
 
       <textarea
-        name="benefits"
-        placeholder="what does the student benefit? "
-        value={formData.benefits}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        name="benefits"  placeholder="what does the student benefit? "  value={formData.benefits}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       {errors.benefits && <p className="text-red-500 mb-4">{errors.benefits}</p>}
       
       <input
-        type="datetime-local"
-        name="application_deadline"
-        value={formData.application_deadline}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        type="datetime-local"  name="application_deadline"  value={formData.application_deadline}  onChange={handleChange}
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       {errors.application_deadline && <p className="text-red-500 mb-4">{errors.application_deadline}</p>}
 
       <input
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="number"
-        name="applicant_count"
-        placeholder="How many applications needed"
-        value={formData.applicant_count}
-        onChange={handleChange}
-        
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  type="number"
+        name="applicant_count"  placeholder="How many applications needed"  value={formData.applicant_count}  onChange={handleChange}  
       />
       {errors.applicant_count && <p className="text-red-500 mb-4">{errors.applicant_count}</p>}
 
+        <div className='mb-4'>
+          <label htmlFor='picture' className='block text-lg font-semibold'>Display Picture(optiona) </label>
+          <input type='file' name='picture'onChange={handleFileChange} className='w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+          <p className='text-gray-900'>Upload any relatable picture that can go with your application. its optional</p>
+          {errors.picture && <p className='text-red-500 mb-4'>{errors.picture}</p>}
+        </div>
+        
       <input
-        type="file"
-        name="company_logo"
-        onChange={handleFileChange}
-        placeholder='company logo image'
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
+        type="file"  name="company_logo"  onChange={handleFileChange}  placeholder='company logo image'
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"  required
       />
       <p className="text-gray-900"> Please add company logo image </p>
       {errors.company_logo && <p className="text-red-500 mb-4">{errors.company_logo}</p>}

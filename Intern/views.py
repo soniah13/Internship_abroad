@@ -176,5 +176,8 @@ def employer_job_list(request):
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class JobRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Internship.objects.all()
+    serializer_class = InternshipSerializer
 
 

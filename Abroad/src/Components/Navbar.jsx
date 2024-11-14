@@ -35,6 +35,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                 {/* Center links for large screens */}
                 <nav className='hidden md:flex justify-center  font-semibold text-xl'>
                     <Link to='/' className={getLinkClassName('/')}>HOME</Link>
+                    <Link to='/about' className={getLinkClassName('/about')}>ABOUT</Link>
                     {isLoggedIn && role === 'student' && (
                         <Link to='/jobs' className={getLinkClassName('/jobs')}>INTERNSHIPS</Link>
                     )}
@@ -85,20 +86,21 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                         <span className='text-center text-sm'>Profile</span>
                     </Link>
                     )}
-                        <Link to='/' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>HOME</Link>
+                        <Link to='/' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>HOME</Link>
+                        <Link to='/about' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>ABOUT US</Link>
                         {isLoggedIn && role === 'student' && (
-                            <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>
+                            <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>
                         )}
                         {isLoggedIn && role === 'employer' && (
-                            <Link to='/post-jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>POST INTERNSHIP</Link>
+                            <Link to='/post-jobs' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>POST INTERNSHIP</Link>
                         )}
                         {isLoggedIn && role === 'employer' && (
-                            <Link to='/employer-jobs' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>POSTED JOBS</Link>
+                            <Link to='/employer-jobs' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>POSTED JOBS</Link>
                         )}
                         {isLoggedIn ? (
-                            <Link to='/logout' onClick={handleLogout} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>LOGOUT</Link>
+                            <Link to='/logout' onClick={handleLogout} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>LOGOUT</Link>
                         ) : (
-                            <Link to='/login' onClick={toggleDropdown} className='hover:bg-gray-400 hover:text-black rounded-md px-3 py-2'>LOGIN</Link>
+                            <Link to='/login' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>LOGIN</Link>
                         )}
                     </nav>
                 </div>

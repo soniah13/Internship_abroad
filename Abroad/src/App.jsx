@@ -12,6 +12,8 @@ import LostPage from './Components/LostPage';
 import StudentProfile from './Components/StudentProfile';
 import { ACCESS_TOKEN , ROLE} from './constants';
 import EmployerJobs from './Components/EmployerJobs';
+import PostedPreview from './Components/PostedPreview';
+import AboutUs from './Components/AboutUs';
 
 
 function Logout() {
@@ -44,10 +46,12 @@ function App() {
             <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} role={role} />
             <Routes>
                 <Route path='/' element={<Home  />} />
+                <Route path='/about' element={<AboutUs  />} />
                 <Route path='/jobs' element={<ProtectedRoute  requiredRole='student' ><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/student-profile' element={<ProtectedRoute  requiredRole='student' ><StudentProfile/></ProtectedRoute>} />
                 <Route path='/post-jobs' element={<ProtectedRoute  requiredRole='employer'><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/employer-jobs' element={<ProtectedRoute  requiredRole='employer'><EmployerJobs /></ProtectedRoute>} />
+                <Route path='/job-preview/:jobId/' element={<ProtectedRoute  requiredRole='employer'><PostedPreview /></ProtectedRoute>} />
                 <Route path='/internship/:id/' element={<JobsDetails />} />
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path='/logout' element={<Logout />} />

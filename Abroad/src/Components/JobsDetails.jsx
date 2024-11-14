@@ -55,7 +55,7 @@ function JobsDetails() {
                                 <FaLocationDot className="mr-1" /> {internship.city}
                             </p>
                             <p className="text-base sm:text-lg font-semibold flex items-center">
-                                <IoTime className="mr-1" /> {internship.application_deadline}
+                                <IoTime className="mr-1" /> {new Date (internship.application_deadline).toLocaleDateString()}
                             </p>
                         </div>
                     </div>

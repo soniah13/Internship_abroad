@@ -3,6 +3,7 @@ import { FaLocationDot } from "react-icons/fa6";
 
 
 function InternCard({internship, onImageClick}) {
+  const imageUrl = internship.picture || internship.standard_image;
   
 
   return (
@@ -13,7 +14,7 @@ function InternCard({internship, onImageClick}) {
       <p className='text-black-600 py-2'> {internship.city} </p>
       </div>
       <div className='h-48 w-full overflow-hidden'>
-        <img src={internship.picture} alt={internship.company_name} onClick={() => onImageClick(internship.id)}
+        <img src={imageUrl} alt={internship.company_name} onClick={() => onImageClick(internship.id)}
         className='cursor-pointer object-cover w-full h-full'></img>
         </div>
         <div className='p-4 flex flex-col items-center' >
