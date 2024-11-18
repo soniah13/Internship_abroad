@@ -40,6 +40,9 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                         <Link to='/jobs' className={getLinkClassName('/jobs')}>INTERNSHIPS</Link>
                     )}
                     {isLoggedIn && role === 'student' && (
+                        <Link to='documents' className={getLinkClassName('/documents')}>DOCUMENTS</Link>
+                    )}
+                    {isLoggedIn && role === 'student' && (
                     <Link 
                         to='/student-profile' 
                         className='flex items-center justify-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-300'
@@ -90,6 +93,9 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                         <Link to='/about' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>ABOUT US</Link>
                         {isLoggedIn && role === 'student' && (
                             <Link to='/jobs' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>INTERNSHIPS</Link>
+                        )}
+                        {isLoggedIn && role === 'student' && (
+                            <Link to='/documents' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>DOCUMENTS</Link>
                         )}
                         {isLoggedIn && role === 'employer' && (
                             <Link to='/post-jobs' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>POST INTERNSHIP</Link>

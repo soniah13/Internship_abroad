@@ -26,7 +26,7 @@ function AboutUs() {
     return (
         <>
             {/* Header Section with Background */}
-            <div className="relative bg-blue-700 h-64 lg:h-96 w-full flex items-center justify-center">
+            <div className="relative bg-blue-600 h-64 lg:h-96 w-full flex items-center justify-center">
                 {/* Background overlay */}
                 <div className="absolute inset-0 bg-black opacity-50"></div>
 

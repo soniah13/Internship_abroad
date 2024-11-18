@@ -32,7 +32,7 @@ function PostJobs() {
 
   return (
     <>
-      <div className="bg-blue-700 h-48 lg:h-64 w-full p-4 text-white font-bold text-center flex items-center justify-center">
+      <div className="bg-blue-900 h-48 lg:h-64 w-full p-4 text-white font-bold text-center flex items-center justify-center">
         <h1 className="text-lg lg:text-4xl border-b-4 border-white">SUBMIT YOUR FORM</h1>
       </div>
 

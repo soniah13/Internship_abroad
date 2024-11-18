@@ -94,11 +94,14 @@ def decrement_application_count(sender, instance, created, **kwargs):
     if created:
         instance.internship.application_count -= 1
         instance.internship.save()
+
+class Documents(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='documents')
+    resume = CloudinaryField('resume', blank=True, null=True)
+    passport = CloudinaryField('passport', blank=True, null=True)
+    admission_letter = CloudinaryField('admission_letter', blank=True, null=True)
+    visa = CloudinaryField('visa', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Documents"
     
-
-    
-
-# Create your models here.
-
-
-# Create your models here.

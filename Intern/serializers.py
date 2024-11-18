@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from rest_framework import serializers
-from .models import Internship, Country, Application, UserProfile
+from .models import *
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -64,4 +64,14 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['phone_number', 'bio', 'location', 'education', 'profile_picture', 'email', 'username']
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Documents
+        fields = ['id', 'resume', 'admission_letter', 'passport', 'visa', 'user']
+        read_only_fields = ['user']
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
        

@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 function LostPage() {
     const navigate = useNavigate();
 
-    const handleRegister = () => {
-        navigate('/register');
+    const handleGoHome = () => {
+        navigate('');
     };
 
     const handleLogin = () => {
@@ -24,8 +24,8 @@ function LostPage() {
                     <button onClick={handleLogin} className='px-6 py-3 bg-green-600 hover:bg-green-400 text-white font-bold rounded-md transition-colors duration-300'>
                         Login
                     </button>
-                    <button onClick={handleRegister} className='px-6 py-3 bg-blue-600 hover:bg-blue-400 text-white font-bold rounded-md transition-colors duration-300'>
-                        Register
+                    <button onClick={handleGoHome} className='px-6 py-3 bg-blue-600 hover:bg-blue-400 text-white font-bold rounded-md transition-colors duration-300'>
+                        Go Home
                     </button>
                 </div>
             </div>

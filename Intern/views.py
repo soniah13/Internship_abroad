@@ -5,7 +5,7 @@ from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
@@ -179,5 +179,33 @@ def employer_job_list(request):
 class JobRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Internship.objects.all()
     serializer_class = InternshipSerializer
+
+
+class IsOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])   
+def DocumentListCreate(request):
+    if request.method == 'GET':
+        documents = Documents.objects.filter(user=request.user)
+        serializer = DocumentSerializer(documents, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = DocumentSerializer(data=request.data, context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.error, status=400)
+
+    
+class DocumentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Documents.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    
+
 
 

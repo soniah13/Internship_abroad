@@ -38,7 +38,7 @@ function EmployerJobs() {
 
   return (
     <>
-    <div className="bg-blue-700 h-48 lg:h-64 w-full p-4 text-white font-bold text-center flex items-center justify-center">
+    <div className="bg-blue-900 h-48 lg:h-64 w-full p-4 text-white font-bold text-center flex items-center justify-center">
         <h1 className="text-4xl lg:text-4xl border-b-4 border-white">YOUR JOBS</h1>
       </div>
       <div className='flex flex-col lg:flex-row gap-6 p-4 bg-blue-100 justify-center items-center'>

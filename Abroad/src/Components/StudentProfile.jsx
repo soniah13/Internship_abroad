@@ -4,7 +4,7 @@ import ProfileView from './ProfileView';
 
 function StudentProfile() {
   const [profileData, setProfileData] = useState({});
-  const [isEditing, setIsEditing] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [errors, setErrors]= useState({});
 
   useEffect(() => {
