@@ -90,7 +90,7 @@ class RegistrationView(generics.CreateAPIView):
             headers=headers
         )
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def student_profile(request):
     if request.user.role != 'student':
@@ -107,11 +107,15 @@ def student_profile(request):
             'email':request.user.email,
         }
         return Response(student_data)
-    elif request.method == 'PUT':
-        serializer = StudentProfileSerializer(data= request.data)
+    elif request.method == 'PATCH':
+        serializer = StudentProfileSerializer(
+            instance = request.user,
+            data=request.data,
+            partial=True
+        )
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])

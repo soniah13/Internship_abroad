@@ -32,14 +32,14 @@ function PostJobs() {
 
   return (
     <>
-      <div className="bg-blue-900 h-48 lg:h-64 w-full p-4 text-white font-bold text-center flex items-center justify-center">
-        <h1 className="text-lg lg:text-4xl border-b-4 border-white">SUBMIT YOUR FORM</h1>
+      <div className="bg-blue-900 h-48 lg:h-96 w-full p-4 text-white font-bold text-center flex items-center justify-center">
+        <h1 className="text-lg lg:text-5xl ">POST YOUR <span className='text-blue-200'>INTERNSHIP ABROAD</span></h1>
       </div>
 
       {/* Main Section */}
-      <div className="flex flex-col lg:flex-row gap-6 p-4 bg-blue-100">
+      <div className="flex flex-col lg:flex-row gap-6  p-8 bg-blue-100">
         {/* Form Selection */}
-        <div className="w-full lg:w-2/5 bg-gray-100 shadow-lg rounded-lg p-4 sm:p-6 lg:p-8 space-y-4">
+        <div className="w-full lg:w-2/5 bg-gray-100 shadow-lg rounded-lg p-8 sm:p-6 lg:p-8 space-y-4">
         
           <button
             onClick={() => handleSelectedForm('Location')}

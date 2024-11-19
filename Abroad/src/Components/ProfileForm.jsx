@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IoPerson } from "react-icons/io5";
 import {useNavigate} from 'react-router-dom';
+import { FiAlertCircle } from "react-icons/fi";
 
 
 function ProfileForm({profileData = {}, onSubmit}) {
@@ -32,22 +33,36 @@ function ProfileForm({profileData = {}, onSubmit}) {
 
   const handleSubmit = async (e) => {
       e.preventDefault();
-      try {
-        await onSubmit(formData);
-        alert("Profile updated successfully!");
-        navigate('/student-profile')
-      } catch (error) {
-        if (error.response && error.response.status === 400) {
-          setErrors(error.response.data); // Assuming the backend returns an object with error details
-        } else {
-          alert("An error occurred. Please try again.");
-        }
+      if(!formData.phone_number || !formData.bio || !formData.location || !formData.education){
+        setErrors({general: 'All fields are required!'});
       }
+
+      try {
+        const editableFields = {
+          phone_number: formData.phone_number,
+          bio: formData.bio,
+          location: formData.location,
+          education: formData.education,
+          profile_picture: formData.profile_picture,
+        };
+        await onSubmit(editableFields);
+        alert("Profile updated successfully!");
+        navigate('/student-profile');
+
+        }catch (error) {
+          if (error.response && error.response.status === 400) {
+            setErrors(error.response.data);
+          } else {
+            alert ('An error occured. please try again');
+          }
+        } 
     };
   
 
   return (
-    <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{backgroundImage: "url(/src/assets/Images/home.jpg)"}}>
+    <div className='relative flex items-center justify-center h-screen bg-cover bg-center' 
+    style={{backgroundImage: "url(/src/assets/Images/home.jpg)"}}>
+      
       <div className="absolute inset-0 bg-black opacity-50"></div> 
       <form onSubmit={handleSubmit} className='z-10 max-w-md w-full bg-white p-8 rounded-lg shadow-lg'>
         <h2 className='text-2xl font-bold mb-6 text-center'> Edit Your Profile</h2>
@@ -63,7 +78,8 @@ function ProfileForm({profileData = {}, onSubmit}) {
         </div>
 
         <input type='text' name='username' placeholder='Username' value={formData.username || ''} disabled
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'>
+         </input>
         {errors.username && <div className="text-red-600 mb-2">{errors.username}</div>}
 
         <input type='text' name='email' placeholder='Email' value={formData.email || ''} disabled
@@ -86,7 +102,7 @@ function ProfileForm({profileData = {}, onSubmit}) {
         onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
         {errors.education && <div className="text-red-600 mb-2">{errors.education}</div>}
 
-        <button type='submit' className='w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-300 focus:outline-none'> Add Profile </button>
+        <button type='submit' className='w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-300 focus:outline-none'> Edit Profile </button>
 
         {errors.general && (
           <div className='text-red-600 text-center mt-4'>

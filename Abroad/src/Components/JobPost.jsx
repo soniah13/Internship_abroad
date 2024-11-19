@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function JobPost({ countryId }) {
+function JobPost({ countryName }) {
   const [formData, setFormData] = useState({
     title: '',
     company_name: '',
-    country: countryId || '',
+    country: countryName || '',
     city: '',
     duration: '',
     majors: '',
@@ -33,9 +33,9 @@ function JobPost({ countryId }) {
 
   useEffect(() => {
 
-    const savedCountryId = localStorage.getItem('countryId');
-    if(savedCountryId) {
-      setFormData((prev) => ({ ...prev, country: savedCountryId}));
+    const savedCountryName = localStorage.getItem('countryName');
+    if(savedCountryName) {
+      setFormData((prev) => ({ ...prev, country: savedCountryName}));
     }
   }, []);
 
@@ -118,7 +118,7 @@ function JobPost({ countryId }) {
 
   return (
     <form onSubmit={handleSubmit} className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg ">
-      <h1 className="text-2xl font-bold mb-6 text-center">Post an Internship</h1>
+      <h2 className="text-2xl font-bold mb-6 text-center">Fill this form to post an internship</h2>
       
       {errors.global && <p className="text-red-500 mb-4 text-center">{errors.global}</p>}
 
@@ -136,8 +136,9 @@ function JobPost({ countryId }) {
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"  name="country"  placeholder="Country"  value={formData.country}  onChange={handleChange}  required
+        type="text"  name="country"  placeholder="Country"  value={formData.country}  onChange={handleChange}  disabled
       />
+      <p className='p-2'>* country has already been filled for you </p>
       {errors.country && <p className="text-red-500 mb-4">{errors.country}</p>}
 
       <input

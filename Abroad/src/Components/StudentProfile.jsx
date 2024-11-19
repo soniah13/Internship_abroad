@@ -38,21 +38,22 @@ function StudentProfile() {
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/v1/profile/student/', {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access')}`
         },
         body: formData,
       });
   
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.log("Update error:", errorData);
-        setErrors(errorData);
-      } else {
+      if (response.ok) {
         const data = await response.json();
-        setProfileData(data);
+        setProfileData(data)
         setIsEditing(false);
+        setErrors({});
+
+      } else {
+        const errorData = await response.json();
+        setErrors(errorData);
       }
     } catch (error) {
       console.error("Network error:", error);
@@ -65,7 +66,7 @@ function StudentProfile() {
       {isEditing ? (
         <ProfileForm profileData={profileData} onSubmit={handleSubmit} />
       ) : (
-        <ProfileView profileData={profileData} onEdit={handleEdit} />
+        <ProfileView profileData={profileData} onEdit={handleEdit} errors={errors}/>
         
       )}
     </div>

@@ -121,15 +121,16 @@ function StudentDocuments() {
   };
   return (
     <>
-    <div className="bg-blue-900 h-48  w-full p-4 text-white font-bold text-center flex items-center justify-center">
-        <h1 className="text-lg lg:text-4xl border-b-4 border-white"> DOCUMENTS REQUIRED FOR INTERNSHIP ABROAD </h1>
+    <div className="bg-blue-900 h-80  w-full p-4 text-white font-bold text-center flex items-center justify-center">
+        <h1 className="text-lg lg:text-4xl"> DOCUMENTS REQUIRED FOR <span className='text-blue-200'>
+          INTERNSHIP ABROAD </span></h1>
       </div>
 
       {/* Main Section */}
       <div className="flex flex-col lg:flex-row gap-6 p-4 bg-blue-100">
         {/* Form Selection */}
         <div className="w-full lg:w-2/5 bg-gray-100 shadow-lg rounded-lg p-4 sm:p-6 lg:p-8 space-y-4">
-        <p className='text-xl text-black font-medium'> upload documents here. Only you can see. Ensuring privacy</p>
+        <p className='text-xl text-black font-medium'> upload documents here. Privacy has been ensured</p>
 
         {['resume', 'visa', 'passport', 'admission_letter'].map((docType) => (
           <button 

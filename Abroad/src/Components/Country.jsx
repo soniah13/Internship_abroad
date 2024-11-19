@@ -10,7 +10,7 @@ function Country() {
 
   const [errors, setErrors] = useState({});
   const [showJobPostForm, setShowJobPostForm] = useState(false);
-  const [countryId, setCountryId] = useState(null);
+  const [countryName, setCountryName] = useState(null);
 
   const CONTINENTS = [
     'Africa',
@@ -51,7 +51,7 @@ function Country() {
 
       if (response.ok) {
         const responseData = await response.json();
-        setCountryId(responseData.id);
+        setCountryName(responseData.name);
         setShowJobPostForm(true);
         setFormData({
           name: '',
@@ -70,7 +70,7 @@ function Country() {
   };
 
   if (showJobPostForm) {
-    return <JobPost onComplete={() => setShowJobPostForm(false)} countryId={countryId} />;
+    return <JobPost onComplete={() => setShowJobPostForm(false)} countryName={countryName} />;
   }
 
   return (

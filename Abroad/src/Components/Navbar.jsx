@@ -45,10 +45,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                     {isLoggedIn && role === 'student' && (
                     <Link 
                         to='/student-profile' 
-                        className='flex items-center justify-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-300'
+                        className='flex items-center justify-center space-x-2 text-black block rounded-md px-4 mx-5 font-semibold hover:bg-blue-400 hover:text-black transition-colors duration-300'
                     >
                         <IoPersonCircleOutline size={24} />
-                        <span className='text-center text-sm'>Profile</span>
+                        <span className='text-center text-xl'>PROFILE</span>
                     </Link>
                     )}
 
@@ -69,9 +69,9 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                 {/* Right links for large screens */}
                 <nav className='hidden md:flex font-semibold text-xl uppercase space-x-4'>
                     {isLoggedIn ? (
-                        <Link to='/logout' onClick={handleLogout} className={getLinkClassName('/logout')}>LOGOUT</Link>
+                        <Link to='/logout' onClick={handleLogout} className='bg-black text-white hover:bg-blue-600 hover:text-black rounded-md px-3 py-2 font-semibold'>LOGOUT</Link>
                     ) : (
-                        <Link to='/login' className='bg-blue-600 text-white hover:bg-gray-400 hover:text-black rounded-md px-3 py-2 font-semibold'>LOGIN</Link>
+                        <Link to='/login' className='bg-blue-600 text-white hover:bg-black rounded-md px-3 py-2 font-semibold'>LOGIN</Link>
                     )}
                 </nav>
             </div>
@@ -83,10 +83,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn, role }) {
                     {isLoggedIn && role === 'student' && (
                     <Link 
                         to='/student-profile' 
-                        className='flex items-center justify-center space-x-2 text-gray-100 hover:text-blue-900 transition-colors duration-300'
+                        className='flex items-center justify-center space-x-2 text-white  hover:bg-white hover:text-black rounded-md px-3 py-2'
                     >
                         <IoPersonCircleOutline size={24} />
-                        <span className='text-center text-sm'>Profile</span>
+                        <span className='text-center text-xl'>PROFILE</span>
                     </Link>
                     )}
                         <Link to='/' onClick={toggleDropdown} className='hover:bg-white hover:text-black rounded-md px-3 py-2'>HOME</Link>

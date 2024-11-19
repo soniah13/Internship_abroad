@@ -64,6 +64,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['phone_number', 'bio', 'location', 'education', 'profile_picture', 'email', 'username']
+        read_only_fields = ['username','email']
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
