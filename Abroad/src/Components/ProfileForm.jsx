@@ -77,15 +77,23 @@ function ProfileForm({profileData = {}, onSubmit}) {
           <input type='file' name='profile_picture' onChange={handleFileChange} className='mt-3' />
         </div>
 
+          <div className='relative mb-4'>
         <input type='text' name='username' placeholder='Username' value={formData.username || ''} disabled
         onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'>
          </input>
+         <FiAlertCircle className='absolute right-3 top 1/" transform -translate-y-1/" text-red-400'
+          title='Username cannot be edited'/>
         {errors.username && <div className="text-red-600 mb-2">{errors.username}</div>}
+        </div>
 
+          <div className='relative mb-4'>
         <input type='text' name='email' placeholder='Email' value={formData.email || ''} disabled
         onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        <FiAlertCircle className='absolute right-3 top 1/" transform -translate-y-1/" text-red-400'
+        title='Email cannot be edited'/> 
         {errors.email && <div className="text-red-600 mb-2">{errors.email}</div>}
-
+        </div>
+        
         <input type='text' name='phone_number' placeholder='Phone Number' value={formData.phone_number || ''}
         onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
         {errors.phone_number && <div className="text-red-600 mb-2">{errors.phone_number}</div>}

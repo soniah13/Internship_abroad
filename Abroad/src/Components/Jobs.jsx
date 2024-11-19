@@ -74,12 +74,9 @@ function Jobs({internships = [], setInternships}) {
             <div className='mt-4 w-3/4 md:w-1/2'>
             <input type='text' placeholder='What do you want do?' value={search} onChange={handleSearch}
             className='w-full p-3 mb-4 bg-gray-100 bg-opacity-40 text-white placeholder-white outline-none rounded-md'></input>
-            {countries.length > 0 && (
-            <input type='text' placeholder='where do you want to go?' value={countryFilter} onChange={handleCountryChange}
-            className='w-full p-3 mb-4 bg-gray-100 bg-opacity-40 text-white placeholder-white outline-none rounded-md'></input>
-        )}
+            
             <p className='text-white mt-2'>
-                {filteredInternships.length} result{filteredInternships.length !== 1 && 's'} found
+                {filteredInternships.length} internship{filteredInternships.length !== 1 && 's'} found
             </p>
             </div>
         </div>

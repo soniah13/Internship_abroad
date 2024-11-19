@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IoTime } from 'react-icons/io5';
+import { BsCalendar2CheckFill } from "react-icons/bs";
 import { FaLocationDot } from 'react-icons/fa6';
 
 function JobsDetails() {
@@ -55,7 +55,7 @@ function JobsDetails() {
                                 <FaLocationDot className="mr-1" /> {internship.city}
                             </p>
                             <p className="text-base sm:text-lg font-semibold flex items-center">
-                                <IoTime className="mr-1" /> {new Date (internship.application_deadline).toLocaleDateString()}
+                                <BsCalendar2CheckFill className="mr-1" /> {new Date (internship.application_deadline).toLocaleDateString()}
                             </p>
                         </div>
                     </div>
