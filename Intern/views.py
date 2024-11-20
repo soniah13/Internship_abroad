@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from .models import Internship, Country, UserProfile
+from rest_framework.exceptions import NotFound
+from rest_framework.views import APIView
+from .models import *
 from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view, permission_classes
@@ -211,31 +212,55 @@ class DocumentDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 
-class ApplicationCreateView(generics.CreateAPIView):
+class ApplicationCreateView(generics.ListCreateAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         internship = serializer.validated_data['internship']
-        if internship.application_count >= internship.max_applications:
+        applicant = self.request.user
+        if internship.applicant_count >= internship.max_applications:
             raise serializers.ValidationError({"detail": "No more applications accepted for this internship"})
-        internship.application_count += 1
+        if Application.objects.filter(internship=internship, applicant=applicant).exists():
+            raise serializers.ValidationError({ "detail":"You have already applied for this internship"})
+        internship.applicant_count += 1
         internship.save()
-        serializer.save(applicant=self.request.user.userprofile)
+        serializer.save(applicant=applicant)
+
+    def get_queryset(self):
+        return Application.objects.filter(applicant=self.request.user)
 
 class ApplicationsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Application.objects.all().select_related('internship', 'applicant')
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-class EmployerApplicationView(generics.ListAPIView):
-    serializer_class = ApplicationSerializer
+    def get_object(self):
+        obj = super().get_object()
+        if obj.applicant != self.request.user:
+            raise permissions.PermissionDenied("You do not have permission to access this application.")
+        return obj
+
+class EmployerApplicationView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return Application.objects.filter(
-            internship__employer=self.request.user.userprofile
-        ).select_related('internship', 'applicant').prefetch_related('documents')
+    def get(self, request):
+        internship_id = request.GET.get('internship', None)
+        if internship_id is None:
+            return Response({'detail': "Internship ID is required."}, status=400)
+        
+        try: 
+            internship = Internship.object.get(id=internship_id)
+        except Internship.DoesNotExist:
+            raise NotFound("Internship not found.")
+        
+        if internship.employer != request.user:
+            return Response({"detail": "You do not have permissionto view these applications."}, status=403)
+        applications = Application.objects.filter(internship=internship_id)
+
+        serializer = ApplicationSerializer(applications, many=True)
+        return Response(serializer.data)
+
     
 
 

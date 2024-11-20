@@ -72,7 +72,9 @@ function ApplicationForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const formDataToSend = new FormData();
+        
 
         formDataToSend.append('applicant_name', formData.applicant_name);
         formDataToSend.append('applicant_email', formData.applicant_email);
@@ -89,13 +91,15 @@ function ApplicationForm() {
         formDataToSend.append('employer', employerId);
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/applications/${id}/`, {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/applications/', {
+                method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
                 body: formDataToSend,
             });
             if(response.ok) {
+                const data = await response.json();
                 setMessage('Application submitted successfully!');
                 navigate('/jobs')
             } else {
@@ -154,7 +158,7 @@ function ApplicationForm() {
                                     className='text-blue-600 hover:text-blue-800'> View uploaded resume </a></div>
                                 )}
                                 <input type='file' name='documents' onChange={handleChange} 
-                                className='w-full p-2 border rounded-md shadow-lg' required />
+                                className='w-full p-2 border rounded-md shadow-lg'/>
                                 </div>
                                 
                                 <button className=' w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-900 disabled:opacity-50'
