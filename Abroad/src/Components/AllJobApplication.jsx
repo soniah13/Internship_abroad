@@ -11,7 +11,7 @@ function AllJobApplication() {
           try { 
             const response = await fetch(`http://127.0.0.1:8000/api/v1/employer/applications/?internship=${jobId}`, {
                 headers: {
-                    Authorization: `Bearer${localStorage.getItem('access')}`,
+                    Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
             });
             const data = await response.json();
@@ -22,6 +22,7 @@ function AllJobApplication() {
             setLoading(false);
           }
         }
+        console.log('Job ID:', jobId);
         fetchApplications();
     }, [jobId]);
 
@@ -29,7 +30,7 @@ function AllJobApplication() {
   return (
     <>
       <div className='flex flex-col lg:flex-row gap-6 p-8 bg-blue-100 justify-center items-center'>
-        <h2 className='text-2xl font-semibold mb-4'>List of Applications {jobId}</h2>
+        <h2 className='text-2xl font-semibold mb-4'>List of Applications</h2>
       <div className='w-full lg:w-4/5 bg-gray-100 shadow-lg rounded-md p-8 sm:p-6 lg:p-8 space-y-4'>
       {applications.length ? (
         applications.map((app) => (

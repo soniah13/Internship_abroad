@@ -245,19 +245,19 @@ class EmployerApplicationView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        internship_id = request.GET.get('internship', None)
-        if internship_id is None:
+        internship_id = request.GET.get('internship')
+        if not internship_id:
             return Response({'detail': "Internship ID is required."}, status=400)
         
         try: 
-            internship = Internship.object.get(id=internship_id)
+            internship = Internship.objects.get(id=internship_id, employer=request.user)
         except Internship.DoesNotExist:
             raise NotFound("Internship not found.")
         
         if internship.employer != request.user:
             return Response({"detail": "You do not have permissionto view these applications."}, status=403)
+        
         applications = Application.objects.filter(internship=internship_id)
-
         serializer = ApplicationSerializer(applications, many=True)
         return Response(serializer.data)
 

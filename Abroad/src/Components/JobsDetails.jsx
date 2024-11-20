@@ -43,7 +43,7 @@ function JobsDetails() {
             {/* Main Layout */}
             <div className="flex flex-col lg:flex-row gap-6">
                 {/* Internship Details */}
-                <div className="flex-1 bg-gray-100 p-4 sm:p-6 shadow-lg rounded-lg">
+                <div className="flex-1 bg-blue-100 p-4 sm:p-6 shadow-lg rounded-lg">
                     <div className="flex flex-col sm:flex-row items-start mb-4">
                         <img
                             src={`https://res.cloudinary.com/ddqkfdqy8/${internship.company_logo}`}

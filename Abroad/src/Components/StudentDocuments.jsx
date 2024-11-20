@@ -142,6 +142,7 @@ function StudentDocuments() {
   
   return (
     <>
+    
     <div className="bg-blue-900 h-80  w-full p-4 text-white font-bold text-center flex items-center justify-center">
         <h1 className="text-lg lg:text-4xl"> DOCUMENTS REQUIRED FOR <span className='text-blue-200'>
           INTERNSHIP ABROAD </span></h1>
