@@ -1,6 +1,8 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.dispatch import receiver
+from django.db.models.signals import post_delete, post_save
 
 
 class Country(models.Model):
@@ -64,37 +66,13 @@ class Internship(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True)
     company_logo = CloudinaryField(default = 'company_logo')
     applicant_count = models.PositiveIntegerField(default=0)
-    employer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='internships',  blank=True, null=True)
+    employer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='internships',limit_choices_to={'role': 'employer'},  blank=True, null=True)
     standard_image = CloudinaryField(default='https://res.cloudinary.com/ddqkfdqy8/image/upload/v1730976302/qjliy417egm4jxavpanl.png')
     
 
     def __str__(self):
         return self.title
     
-class Application(models.Model):
-    internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
-    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, limit_choices_to={'role': 'student'}, blank=True, null=True)
-    applicant_name = models.CharField(max_length=100)
-    applicant_email = models.EmailField()
-    max_applications = models.PositiveIntegerField(default=15)
-
-    def reached_application_limit(self):
-        return self.application_count >= self.max_applications
-    
-
-    def __str__(self):
-        return f"{self.applicant_name} - {self.internship.title}"
-
-def increment_application_count(sender, instance, created, **kwargs):
-    if created:
-        instance.internship.application_count += 1
-        instance.internship.save()
-
-def decrement_application_count(sender, instance, created, **kwargs):
-    if created:
-        instance.internship.application_count -= 1
-        instance.internship.save()
-
 class Documents(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='documents')
     resume = CloudinaryField('resume', blank=True, null=True)
@@ -104,4 +82,39 @@ class Documents(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Documents"
+    
+class Application(models.Model):
+    internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
+    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, limit_choices_to={'role': 'student'}, blank=True, null=True)
+    applicant_name = models.CharField(max_length=100)
+    applicant_email = models.EmailField()
+    contact = models.CharField(max_length=15, default='07-0000-0000')
+    location = models.CharField(max_length=100, default='country')
+    documents = models.ManyToManyField(Documents, blank=True, related_name='applications')
+    created_at = models.DateTimeField(auto_now_add=True)
+    max_applications = models.PositiveIntegerField(default=15)
+
+    class Meta:
+        unique_together = ('internship', 'applicant')
+
+    def reached_application_limit(self):
+        return self.application_count >= self.max_applications
+    
+
+    def __str__(self):
+        return f"{self.applicant_name} - {self.internship.title}"
+
+@receiver(post_save, sender=Application)
+def increment_application_count(sender, instance, created, **kwargs):
+    if created:
+        instance.internship.application_count += 1
+        instance.internship.save()
+
+@receiver(post_delete, sender=Application)
+def decrement_application_count(sender, instance, created, **kwargs):
+    if created:
+        instance.internship.application_count -= 1
+        instance.internship.save()
+
+
     

@@ -21,11 +21,17 @@ function StudentDocuments() {
     admission_letter: false,
   });
   const [uploadMessage, setUploadMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/');
+        const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/',{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access')}`,
+          },
+        });
+
         const data = await response.json();
 
         setDocumentData({
@@ -53,17 +59,31 @@ function StudentDocuments() {
     setUploadMessage("");
   };
 
-  const handleDocumentUpload = (formType, document) => {
-    setDocumentData((prevUpload) => ({
-      ...prevUpload,
-      [formType]: document,
-    }));
-    setDocumentUploadStatus((prevStatus) => ({
-      ...prevStatus,
-      [formType]: true,
-    }));
-    setUploadMessage("Document has been uploaded successfully.");
-    setSelectedDocument(null);
+  const uploadDocument = async (formType, document) => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append(formType, document);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/',{
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+        body: formData,
+      });
+
+      if(response.ok) {
+        setDocumentUploadStatus((prev) => ({ ...prev, [formType]: true }));
+        setUploadMessage(`${formType.charAt(0).toUpperCase() + formType.slice(1)} uploaded successfully`);
+      } else {
+        setUploadMessage('Failed to upload the document.');
+      }
+    } catch(error) {
+      console.error('Error uploading document:', error);
+      setUploadMessage('An error occured during upload.');
+    }
+    setLoading(false);
   };
 
   const handleDocumentDelete = async (formType) => {
@@ -83,6 +103,7 @@ function StudentDocuments() {
         [formType]:false,
       }));
       setUploadMessage('');
+
     } catch (error) {
       console.error('Failed to delete document: ', error)
     }
@@ -92,33 +113,33 @@ function StudentDocuments() {
     if (!selectedDocument) return <p className='font-semibold text-3xl text-center'>SELECT A DOCUMENT TO UPLOAD OR EDIT.</p>
     switch (selectedDocument) {
       case 'resume':
-        return <Resume onComplete={(url) => handleDocumentUpload('resume',url)} />;
+        return <Resume onComplete={(url) => uploadDocument('resume',url)} />;
       case 'visa':
-        return <Visa onComplete={(url) => handleDocumentUpload('visa', url)} />;
+        return <Visa onComplete={(url) => uploadDocument('visa', url)} />;
       case 'admission_letter':
-        return <AdmissionLetter onComplete={(url) => handleDocumentUpload('admission_letter', url)} />;
+        return <AdmissionLetter onComplete={(url) => uploadDocument('admission_letter', url)} />;
       case 'passport':
-        return <Passport onComplete={(url) => handleDocumentUpload('passport', url)} />;
+        return <Passport onComplete={(url) => uploadDocument('passport', url)} />;
       default:
         return null;
     }
   };
 
-  const renderDocumentPreview = (formType,label) => {
-    return (
+  const renderDocumentPreview = (formType,label) => (
+    
       documentData[formType] && (
         <div className='p-4 mt-4 bg-gray-200 rounded-lg shadow-lg'>
           <p className='text-lg font-semibold text-gray-700'>{label} </p>
           <img src={documentData[formType]} alt={`${label} Preview`} 
           className='w-full h-32 object-cover rounded mt-2' />
           <div className='flex justify-between mt-2'>
-            <button onClick={() => handleSelectedDocument(formType)} className='text-blue-600 underline'>EDIT</button>
-            <button onClick={() => handleDocumentDelete(formType)} className='text-red-600 underline'>DELETE</button>
+            <button onClick={() => handleSelectedDocument(formType)} className='bg-blue-600 text-white'>EDIT</button>
+            <button onClick={() => handleDocumentDelete(formType)} className='bg-red-600 text-white'>DELETE</button>
           </div>
         </div>
-      )
-    );
-  };
+      )  
+  );
+  
   return (
     <>
     <div className="bg-blue-900 h-80  w-full p-4 text-white font-bold text-center flex items-center justify-center">
@@ -135,7 +156,8 @@ function StudentDocuments() {
         {['resume', 'visa', 'passport', 'admission_letter'].map((docType) => (
           <button 
           key={docType} onClick={() => handleSelectedDocument(docType)}
-          className={`w-full h-24 text-blue-600 text-2xl font-semibold rounded-lg shadow-lg flex items-center justify-center ${documentUploadStatus[docType] ? 'bg-green-200': 'bg-white'}`}>
+          className={`w-full h-24 text-blue-600 text-2xl font-semibold rounded-lg shadow-lg flex items-center justify-center
+           ${documentUploadStatus[docType] ? 'bg-green-200': 'bg-white'}`}>
             {docType.toUpperCase().replace('_', '')} {documentUploadStatus[docType] && <TiTick size={32}/>}
           </button>
         ))}
@@ -143,7 +165,6 @@ function StudentDocuments() {
           <div className='w-full lg:w-3/5 bg-blue-100 p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg'>
           {uploadMessage && <p className='text-green-600 font-semibold'>{uploadMessage} </p>}
           {renderSelectedDocumentForm()}
-
           {renderDocumentPreview('resume', 'Resume')}
           {renderDocumentPreview('visa', 'Visa')}
           {renderDocumentPreview('passport', 'Passport')}

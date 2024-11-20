@@ -200,15 +200,42 @@ def DocumentListCreate(request):
     elif request.method == 'POST':
         serializer = DocumentSerializer(data=request.data, context={'request':request})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data, status=201)
-        return Response(serializer.error, status=400)
+        return Response(serializer.errors, status=400)
 
     
 class DocumentDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Documents.objects.all()
+    queryset = Documents.objects.all().select_related('user')
     serializer_class = DocumentSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+
+class ApplicationCreateView(generics.CreateAPIView):
+    serializer_class = ApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        internship = serializer.validated_data['internship']
+        if internship.application_count >= internship.max_applications:
+            raise serializers.ValidationError({"detail": "No more applications accepted for this internship"})
+        internship.application_count += 1
+        internship.save()
+        serializer.save(applicant=self.request.user.userprofile)
+
+class ApplicationsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Application.objects.all().select_related('internship', 'applicant')
+    serializer_class = ApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+class EmployerApplicationView(generics.ListAPIView):
+    serializer_class = ApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Application.objects.filter(
+            internship__employer=self.request.user.userprofile
+        ).select_related('internship', 'applicant').prefetch_related('documents')
     
 
 

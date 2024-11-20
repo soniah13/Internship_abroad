@@ -7,7 +7,7 @@ function InternCard({internship, onImageClick}) {
   
 
   return (
-    <div className='rounded-md shadow-md m-5 w-96 h-auto flex flex-col bg-blue-100'>
+    <div className='rounded-md shadow-md m-5 w-72 h-auto flex flex-col bg-blue-100'>
       <h2 className='font-bold text-lg sm:text-base text-left py-2 px-4 truncate'>{internship.title}</h2>
       <div className='flex flex-wrap items-center px-4'>
       <FaLocationDot className='mr-2' />

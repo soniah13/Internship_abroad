@@ -95,7 +95,8 @@ function JobsDetails() {
                         </div>
                     )}
                     <p className="text-sm sm:text-base text-blue-600 mb-4">Continent: {countryDetails.continent || 'Unknown'}</p>
-                    <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-300">
+                    <button onClick={() => navigate(`/application-form/${id}`)}
+                     className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-300">
                         Apply Now
                     </button>
                 </div>

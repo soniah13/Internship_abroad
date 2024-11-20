@@ -15,9 +15,14 @@ class CountrySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ApplicationSerializer(serializers.ModelSerializer):
+    documents = serializers.StringRelatedField(many=True)
     class Meta:
         model: Application
         fields = '__all__'
+        extra_kwargs = {
+            'applicant': {'read_only': True},
+            'internship': {'read_only': True},
+            }
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -12,6 +12,9 @@ urlpatterns = [
     path('employer/jobs/<int:pk>/', JobRetrieveUpdateDestroy.as_view(), name='preview_id'),
     path('students/documents/', DocumentListCreate, name='documents'),
     path('students/documents/<int:pk>/', DocumentDetailView.as_view(), name='document_detail'),
+    path('applications/', ApplicationCreateView.as_view(), name='applications'),
+    path('applications/<int:pk>/', ApplicationsRetrieveUpdateDestroy.as_view(), name='single_applications'),
+    path('employer/applications/', EmployerApplicationView.as_view(), name='employer_applications')
     
     
     

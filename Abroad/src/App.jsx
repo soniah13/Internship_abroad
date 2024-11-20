@@ -15,6 +15,8 @@ import EmployerJobs from './Components/EmployerJobs';
 import PostedPreview from './Components/PostedPreview';
 import AboutUs from './Components/AboutUs';
 import StudentDocuments from './Components/StudentDocuments';
+import ApplicationForm from './Components/ApplicationForm';
+import AllJobApplication from './Components/AllJobApplication';
 
 
 function Logout() {
@@ -51,9 +53,11 @@ function App() {
                 <Route path='/jobs' element={<ProtectedRoute  requiredRole='student' ><Jobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/student-profile' element={<ProtectedRoute  requiredRole='student' ><StudentProfile/></ProtectedRoute>} />
                 <Route path='/documents' element={<ProtectedRoute  requiredRole='student' ><StudentDocuments/></ProtectedRoute>} />
+                <Route path='/application-form/:id/' element={<ApplicationForm />} />
                 <Route path='/post-jobs' element={<ProtectedRoute  requiredRole='employer'><PostJobs internships={internships} setInternships={setInternships} /></ProtectedRoute>} />
                 <Route path='/employer-jobs' element={<ProtectedRoute  requiredRole='employer'><EmployerJobs /></ProtectedRoute>} />
                 <Route path='/job-preview/:jobId/' element={<ProtectedRoute  requiredRole='employer'><PostedPreview /></ProtectedRoute>} />
+                <Route path='/job-applications/:jobId' element={<ProtectedRoute requiredRole='employer' ><AllJobApplication/> </ProtectedRoute>} />
                 <Route path='/internship/:id/' element={<JobsDetails />} />
                 <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path='/logout' element={<Logout />} />

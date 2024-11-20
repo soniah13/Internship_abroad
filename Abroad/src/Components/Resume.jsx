@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
 
-function Resume({onComplete}) {
-  const [selectedFile, setSelectedFile] = useState(null);
+function Resume({ onComplete }) {
+  const [resumeFile, setResumeFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const handleChange = (e) => {
+    setResumeFile(e.target.files[0]);
   };
 
-  const handleUpload = async () => {
-    if(!selectedFile) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(!resumeFile) {
+      alert("Please select a file to upload.");
+      return;
+    }
 
     const formData = new FormData();
-    formData.append('document', selectedFile);
+    formData.append('resume', resumeFile);
 
     try{
       const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/',{
@@ -20,12 +25,14 @@ function Resume({onComplete}) {
           'Authorization': `Bearer ${localStorage.getItem('access')}`
         }, body: formData,
       });
-      const data = await response.json();
+      
 
-      if(data.success) {
-        onComplete(data.documentUrl);
+      if(response.ok) {
+        const data = await response.json();
+        onComplete(data.url); //notify studentdocument of successful upload
       } else {
-        alert('Failed to upload document');
+        console.log('Upload failes:', await response.json());
+        alert('Failed to upload resume');
       }
     } catch(error) {
       console.error('Uploading error', error);
@@ -54,20 +61,14 @@ function Resume({onComplete}) {
 
       <h3 className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Resume </h3>
       <div className='flex flex-col items-center'>
-        <label 
-        className='cursor-pointer bg-blue-100 border border-blue-300 px-4 py-2 rounded-md shadow-sm text-black hover:bg-blue-200 duration-200 mb-4'>
-          Select File 
-          <input type='file' onChange={handleFileChange} className='hidden'></input>
-
-        </label>
-
-        {selectedFile && (
-          <p className='text-sm text-gray-600'> Selected file: <span className='font-medium'> {selectedFile.name}</span> </p>
-        )}
-
-        <button onClick={handleUpload} className='bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-400 transition duration-300 shadow-lg mt-4'>
-          Add Resume
-        </button>
+        <form onSubmit={handleSubmit}>
+          <label className='block text-lg font-semibold mb-2'> Upload Resume </label>
+          <input type='file' accept='.pdf,.doc,.docx' onChange={handleChange}
+          className='block w-full border p-2 rounded mb-4'/>
+          <button type='submit' className='bg-blue-600 text-white py-2 px-4 rounded shadow'>
+            Upload
+          </button>
+        </form>
       </div>
     </div>
   );
