@@ -29,27 +29,58 @@ function AllJobApplication() {
     if(loading) return <p>Loading...</p>
   return (
     <>
-      <div className='flex flex-col lg:flex-row gap-6 p-8 bg-blue-100 justify-center items-center'>
-        <h2 className='text-2xl font-semibold mb-4'>List of Applications</h2>
-      <div className='w-full lg:w-4/5 bg-gray-100 shadow-lg rounded-md p-8 sm:p-6 lg:p-8 space-y-4'>
-      {applications.length ? (
-        applications.map((app) => (
-          <div key={app.id} className="job-card p-4 bg-white shadow rounded-lg mb-4">
+    
+    <div className="flex flex-col lg:flex-col gap-8 p-8 bg-blue-50 justify-start items-center min-h-screen">
+    <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center uppercase text-gray-800">
+        List of Applications
+    </h2>
 
-            <div className='flex flex-col gap-4 p-6 bg-blue-100 shadow-lg rounded-lg'>
-            <h3 className='text-xl font-semibold' >Applicant Name: {app.applicant_name}</h3>
-            <p>EMAIL: {app.applicant_email}</p>
-            <p>CONTACT: {app.contact}</p>
-            <p>LOCATION: {app.location}</p>
-            <a href={app.resume_url} className='text-blue-600'> View Uploaded documents</a>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className='text-2xl font-bold text-center'>No Applications yet.</p>
-      )}
-      </div>
-      </div>
+    {/* Back Button */}
+    <button 
+        onClick={() => navigate(-1)} 
+        className="text-blue-600 hover:text-blue-700 flex items-center mb-6 text-sm sm:text-base"
+    >
+        <svg className="h-5 w-5 " fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 5L3 12l7 7V5z" />
+        </svg>
+        Back to All Internships
+    </button>
+
+    {/* Applications Section */}
+    <div className="w-full lg:w-3/4 bg-white shadow-lg rounded-lg p-6 sm:p-8 space-y-6">
+        {applications.length ? (
+            applications.map((app) => (
+                <div key={app.id} className="p-6 bg-blue-100 shadow-md rounded-lg">
+                    <h3 className="text-lg sm:text-xl  text-gray-800">
+                       <strong> Applicant Name:</strong> {app.applicant_name}
+                    </h3>
+                    <p className="text-lg sm:text-xl text-gray-700">
+                        <strong>Email:</strong> {app.applicant_email}
+                    </p>
+                    <p className="text-lg sm:text-xl text-gray-700">
+                        <strong>Contact:</strong> {app.contact}
+                    </p>
+                    <p className="text-lg sm:text-xl text-gray-700">
+                        <strong>Location:</strong> {app.location}
+                    </p>
+                    <a 
+                        href={app.resume_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:underline"
+                    >
+                        View Uploaded Documents
+                    </a>
+                </div>
+            ))
+        ) : (
+            <p className="text-xl sm:text-2xl font-bold text-center text-gray-700">
+                No Applications Yet
+            </p>
+        )}
+    </div>
+</div>
+
     </>
   )
 }
