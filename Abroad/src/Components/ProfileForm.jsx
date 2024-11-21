@@ -78,36 +78,38 @@ function ProfileForm({profileData = {}, onSubmit}) {
         </div>
 
           <div className='relative mb-4'>
-        <input type='text' name='username' placeholder='Username' value={formData.username || ''} disabled
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'>
-         </input>
-         <FiAlertCircle className='absolute right-3 top 1/" transform -translate-y-1/" text-red-400'
-          title='Username cannot be edited'/>
-        {errors.username && <div className="text-red-600 mb-2">{errors.username}</div>}
-        </div>
+            <input type='text' name='username' placeholder='Username' value={formData.username || ''} disabled
+            onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
+            />
+            <FiAlertCircle
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-600"
+                title="Username cannot be edited" />
+            {errors.username && <div className="text-red-600 mb-2">{errors.username}</div>}
+          </div>
 
           <div className='relative mb-4'>
-        <input type='text' name='email' placeholder='Email' value={formData.email || ''} disabled
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
-        <FiAlertCircle className='absolute right-3 top 1/" transform -translate-y-1/" text-red-400'
-        title='Email cannot be edited'/> 
-        {errors.email && <div className="text-red-600 mb-2">{errors.email}</div>}
-        </div>
+            <input type='text' name='email' placeholder='Email' value={formData.email || ''} disabled
+            onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'/>
+            <FiAlertCircle
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-600"
+                  title="Email cannot be edited"/> 
+            {errors.email && <div className="text-red-600 mb-2">{errors.email}</div>}
+            </div>
         
         <input type='text' name='phone_number' placeholder='Phone Number' value={formData.phone_number || ''}
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'/>
         {errors.phone_number && <div className="text-red-600 mb-2">{errors.phone_number}</div>}
 
         <input type='text' name='bio' placeholder='Something cool about you' value={formData.bio || ''}
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'/>
         {errors.bio && <div className="text-red-600 mb-2">{errors.bio}</div>}
 
         <input type='text' name='location' placeholder='Enter your city or country' value={formData.location || ''}
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'/>
         {errors.location && <div className="text-red-600 mb-2">{errors.location}</div>}
 
         <input type='text' name='education' placeholder='Enter your university or collage ' value={formData.education || ''}
-        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'></input>
+        onChange={handleChange} className='w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500'/>
         {errors.education && <div className="text-red-600 mb-2">{errors.education}</div>}
 
         <button type='submit' className='w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-300 focus:outline-none'> Edit Profile </button>

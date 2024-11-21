@@ -31,27 +31,48 @@ function StudentDocuments() {
             Authorization: `Bearer ${localStorage.getItem('access')}`,
           },
         });
+        if (response.ok) {
+          const data = await response.json();
 
-        const data = await response.json();
+          setDocumentData({
+            resume: data.resume || null,
+            visa: data.visa || null,
+            passport: data.passport || null,
+            admission_letter: data.admission_letter || null,
+          });
 
-        setDocumentData({
-          resume: data.resume || null,
-          visa: data.visa || null,
-          passport: data.passport || null,
-          admission_letter: data.admission_letter || null,
-        });
-
-        setDocumentUploadStatus({
-          resume: !!data.resume,
-          visa: !!data.visa,
-          passport: !!data.passport,
-          admission_letter: !!data.admission_letter,
-        });
+          setDocumentUploadStatus({
+            resume: !!data.resume,
+            visa: !!data.visa,
+            passport: !!data.passport,
+            admission_letter: !!data.admission_letter,
+          });
+          //save document data in localStorage
+          localStorage.setItem('documentData', JSON.stringify({
+            resume: data.resume,
+            visa: data.visa,
+            passport: data.passport,
+            admission_letter: data.admission_letter,
+          }));
+        }
       } catch(error){
         console.error('Failed to fetch documents:', error);
       }
     };
-    fetchDocuments();
+    //retrieve data from localStorage to prevent constant reuploading of documents
+    const storedData = JSON.parse(localStorage.getItem('documentData'));
+    if(storedData) {
+      setDocumentData(storedData);
+      setDocumentUploadStatus({
+          resume: !!documentData.resume,
+          visa: !!documentData.visa,
+          passport: !!documentData.passport,
+          admission_letter: !!documentData.admission_letter,
+      });
+    } else {
+      fetchDocuments();
+    }
+          
   }, []);
 
   const handleSelectedDocument = (formType) => {
@@ -74,7 +95,19 @@ function StudentDocuments() {
       });
 
       if(response.ok) {
+        const data = await response.json();
+
+        setDocumentData((prev) => ({ 
+          ...prev, [formType]: data[formType],
+        }));
         setDocumentUploadStatus((prev) => ({ ...prev, [formType]: true }));
+
+        //update localStorage
+        localStorage.setItem('documentData', JSON.stringify({
+          ...documentData,
+          [formType]: data[formType],
+        }));
+
         setUploadMessage(`${formType.charAt(0).toUpperCase() + formType.slice(1)} uploaded successfully`);
       } else {
         setUploadMessage('Failed to upload the document.');
@@ -128,13 +161,16 @@ function StudentDocuments() {
   const renderDocumentPreview = (formType,label) => (
     
       documentData[formType] && (
-        <div className='p-4 mt-4 bg-gray-200 rounded-lg shadow-lg'>
-          <p className='text-lg font-semibold text-gray-700'>{label} </p>
-          <img src={documentData[formType]} alt={`${label} Preview`} 
-          className='w-full h-32 object-cover rounded mt-2' />
-          <div className='flex justify-between mt-2'>
-            <button onClick={() => handleSelectedDocument(formType)} className='bg-blue-600 text-white'>EDIT</button>
-            <button onClick={() => handleDocumentDelete(formType)} className='bg-red-600 text-white'>DELETE</button>
+        <div className='p-4 mt-4 mb-2 flex items-center justify-between bg-gray-200 rounded-lg shadow-lg'>
+          <div className=''>
+          <p className='text-2xl font-semibold text-gray-700'>{label} </p>
+          <a href={documentData[formType]} target='_blank' rel='noopener noreferrer' className='text-blue-600 text-lg hover:underline'>
+            View Document
+          </a>
+          </div>
+          <div className='flex mt-2'>
+            <button onClick={() => handleSelectedDocument(formType)} className='bg-blue-600 text-white rounded-md  py-2 px-2 mr-2 hover:bg-blue-900'>EDIT</button>
+            <button onClick={() => handleDocumentDelete(formType)} className='bg-red-600 text-white rounded-md py-2 px-2 ml-2 hover:bg-red-900'>DELETE</button>
           </div>
         </div>
       )  

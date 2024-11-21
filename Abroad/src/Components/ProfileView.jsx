@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { IoPerson } from "react-icons/io5";
 import { FaLocationDot } from 'react-icons/fa6';
+import { FaUserEdit } from "react-icons/fa";
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import { AiFillPhone } from "react-icons/ai";
+import { FaUserGraduate } from "react-icons/fa";
+
+
 
 function ProfileView({profileData = {}, onEdit}) {
 
@@ -8,30 +14,62 @@ function ProfileView({profileData = {}, onEdit}) {
     <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{backgroundImage: "url(/src/assets/Images/home.jpg)"}}>
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className='container z-10 max-w-md w-full bg-white p-8 rounded-md shadow-lg'>
-        <h1 className='text-3xl font-bold text-center border-b-4 border-blue-600 mb-4'> YOUR PROFILE</h1>
-        <div>
-            {profileData.profile_picture ? (
-                <img src={profileData.profile_picture}
-                alt='Profile Picture' className='w-24 h-24 rounded-full mx-auto object-cover border border-gray-300 mb-4'></img>
-            ): (
-             <IoPerson className='bg-gray-400 text-6xl mx-auto border rounded-full border-gray-400 mb-4'/>
-             )}
+        <div className='relative'>
+        <h1 className='text-center text-4xl font-bold mb-10 text-blue-600 opacity-80'>
+            My Profile
+          </h1>
+          <div className='h-40 bg-blue-900 flex items-center justify-center relative'>
+          {profileData.profile_picture ? (
+          <img src={profileData.profile_picture} alt='Profile Picture' 
+          className='w-32 h-32 rounded-full object-cover border-r border-blue-900 '/>
+          ) : (
+            <IoPerson className='bg-fray-600 text-6xl w-32 h-32 rounded-full border-4 border-blue-900'/>
+          )}
+          </div>
         </div>
-        <p className='text-base sm:text-lg font-semibold flex items-center'>
-        <span className=' mr-2 font-bold'>Phone Number:</span>  {profileData.phone_number || ''}</p>
-        <p className="text-base sm:text-lg font-semibold flex items-center"> 
-            <FaLocationDot  className="mr-1" /> {profileData.location || ''}
-        </p>
-        <p className='text-base sm:text-lg font-semibold flex items-center'>
-          <span className='mr-2 font-bold'>Username:</span> {profileData.username || ''}</p>
-        <p className='text-base sm:text-lg font-semibold flex items-center'>
-        <span className='mr-2 font-bold'>Email:</span> {profileData.email || ''} </p>
-        <p className='text-base sm:text-lg font-semibold flex items-center'>
-        <span className='mr-2 font-bold'>Bio:</span>{profileData.bio || ''} </p>
-        <p className='text-base sm:text-lg font-semibold flex items-center'>
-        <span className='mr-2 font-bold'>Education:</span> {profileData.education || ''} </p>
 
-        <button onClick={onEdit} className='w-full bg-blue-300 text-xl text-white font-bold p-3 rounded-md hover:bg-blue-600 focus:outline-none mt-4'>Edit</button>
+        <div className='flex justify-center mt-4'>
+          <button onClick={onEdit} className='bg-transparent text-blue-600 border-2 border-white rounded-md px-6 py-2 hover:bg-blue-900 hover:text-white flex items-center space-x-2'>
+            <FaUserEdit size={20}/> <span>Edit</span>
+          </button>
+        </div>
+        <div className='mt-8 space-y-4'>
+          <div className='flex items-center space-x-2'> 
+          <FaUserGraduate className='text-blue-600' />
+          <p className='text-lg'>
+            <span className='font-semibold'>Username: </span> {profileData.username || ''}
+          </p>
+          </div>
+
+          <div className='flex items-center space-x-2'> 
+          <MdOutlineAlternateEmail className='text-blue-600' />
+          <p className='text-lg'>
+            <span className='font-semibold'>Email: </span> {profileData.email || ''}
+          </p>
+          </div>
+
+          <div className='flex items-center space-x-2'> 
+          <AiFillPhone className='text-blue-600' />
+          <p className='text-lg'>
+            <span className='font-semibold'>Contact: </span> {profileData.phone_number || ''}
+          </p>
+          </div>
+
+          <div className='flex items-center space-x-2'> 
+          <FaLocationDot className='text-blue-600' />
+          <p className='text-lg'>
+            <span className='font-semibold'>Location: </span> {profileData.location || ''}
+          </p>
+          </div>
+
+          <div>
+            <p> 
+          <strong>Read about {profileData.username || 'User'}:</strong> </p>
+          <p className='text-gray-900'>
+            {profileData.bio || 'There is nothing to read here.'}
+          </p>
+          </div>
+        </div>
       </div>
     </div>
   )
