@@ -48,8 +48,9 @@ function ApplicationForm() {
                 if(response.ok) {
                     const data = await response.json();
                     if(data.resume) {
-                        const resumeUrl = `https://res.cloudinary.com/ddqkfdqy8/${data.resume}`;
-                        setFormData((prev) => ({ ...prev, documents: resumeUrl }));
+                        console.log("Fetched resume url:", data.resume)
+                        //const resumeUrl = `https://res.cloudinary.com/ddqkfdqy8/${data.resume}`;
+                        setFormData((prev) => ({ ...prev, documents: data.resume }));
                     }
                 } else {
                     console.warn('Resume not upload.');
@@ -155,8 +156,9 @@ function ApplicationForm() {
 
                                 <div className='mb-4'>
                                 <label className='block font-semibold text-lg mb-2'> resume </label>
-                                {formData.documents && (
-                                    <div className='mb-2'><a href={formData.documents} target='_blank' rel='noopeer noreferrer'
+                                {formData.documents && typeof formData.documents === "string" &&  (
+                                    <div className='mb-2'>
+                                        <a href={formData.documents} target='_blank' rel='noopeer noreferrer'
                                     className='text-blue-600 hover:text-blue-800'> View uploaded resume </a></div>
                                 )}
                                 <input type='file' name='documents' onChange={handleChange} 

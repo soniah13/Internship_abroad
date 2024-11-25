@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Intern.views import RegistrationView
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from Intern.serializers import LoginTokenObtainPairSerializer
 
@@ -33,6 +35,6 @@ urlpatterns = [
     path('api/user/register/', RegistrationView.as_view(), name='register'),
     
     
-]
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -11,6 +11,7 @@ function Country() {
   const [errors, setErrors] = useState({});
   const [showJobPostForm, setShowJobPostForm] = useState(false);
   const [countryName, setCountryName] = useState(null);
+  const [countryId, setCountryId] = useState(null);
 
   const CONTINENTS = [
     'Africa',
@@ -51,8 +52,13 @@ function Country() {
 
       if (response.ok) {
         const responseData = await response.json();
-        setCountryName(responseData.name);
+        localStorage.setItem('countryId', responseData.id)
+        localStorage.setItem('countryName', responseData.name);
+
+        setCountryId(responseData.id);
+        setCountryName(responseData.name)
         setShowJobPostForm(true);
+
         setFormData({
           name: '',
           continent: '',
@@ -70,7 +76,7 @@ function Country() {
   };
 
   if (showJobPostForm) {
-    return <JobPost onComplete={() => setShowJobPostForm(false)} countryName={countryName} />;
+    return <JobPost onComplete={() => setShowJobPostForm(false)} countryName={countryName} countryId={countryId} />;
   }
 
   return (

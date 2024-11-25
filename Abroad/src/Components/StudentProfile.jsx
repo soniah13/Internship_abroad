@@ -33,6 +33,7 @@ function StudentProfile() {
     const formData = new FormData();
 
     Object.entries(editableData).forEach(([key, value]) => {
+      
       formData.append(key, value);
     });
 

@@ -3,6 +3,7 @@ from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save
+from django.core.exceptions import ValidationError
 
 
 class Country(models.Model):
@@ -74,12 +75,19 @@ class Internship(models.Model):
     def __str__(self):
         return self.title
     
+def user_directory_path(instance, filename):
+    return f'store/doc/{instance.user.username}/{filename}'
+
+def validate_file_extension(value):
+    if not value.name.endswith(('.pdf','.doc','.docx')):
+        raise ValidationError('Invalid file type, only pdf, doc, docx type files are allowed.')
+    
 class Documents(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='documents')
-    resume = CloudinaryField('resume', blank=True, null=True)
-    passport = CloudinaryField('passport', blank=True, null=True)
-    admission_letter = CloudinaryField('admission_letter', blank=True, null=True)
-    visa = CloudinaryField('visa', blank=True, null=True)
+    resume = models.FileField(upload_to=user_directory_path,  validators=[validate_file_extension], blank=True, null=True)
+    passport = models.FileField(upload_to=user_directory_path,  validators=[validate_file_extension], blank=True, null=True)
+    admission_letter = models.FileField(upload_to=user_directory_path, validators=[validate_file_extension], blank=True, null=True)
+    visa = models.FileField(upload_to=user_directory_path, validators=[validate_file_extension], blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s Documents"

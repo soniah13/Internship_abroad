@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
 
-function Resume({onComplete}) {
-  const [selectedFile, setSelectedFile] = useState(null);
+function Visa({ onComplete }) {
+  const [visaFile, setVisaFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const handleChange = (e) => {
+    setVisaFile(e.target.files[0]);
   };
 
-  const handleUpload = async () => {
-    if(!selectedFile) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(!visaFile) {
+      alert("Please select a file to upload.");
+      return;
+    }
 
     const formData = new FormData();
-    formData.append('document', selectedFile);
+    formData.append('visa', visaFile);
 
     try{
       const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/',{
@@ -20,12 +25,14 @@ function Resume({onComplete}) {
           'Authorization': `Bearer ${localStorage.getItem('access')}`
         }, body: formData,
       });
-      const data = await response.json();
+      
 
-      if(data.success) {
-        onComplete(data.documentUrl);
+      if(response.ok) {
+        const data = await response.json();
+        onComplete(data.url); //notify studentdocument of successful upload
       } else {
-        alert('Failed to upload document');
+        console.log('Upload failes:', await response.json());
+        alert('Failed to upload visa');
       }
     } catch(error) {
       console.error('Uploading error', error);
@@ -36,39 +43,41 @@ function Resume({onComplete}) {
   return (
     <div className='max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg '>
       <h2 className='text-2xl font-bold text-center text-blue-600 mb-4'>
-        Visa documentation
+        Visa application process
       </h2>
 
-      <p className='text-gray-600 leading-7 text-center mb-6'>
-      Your resume plays a key role in getting an internship. 
-      </p>
+      <p className='font-medium text-xl'>Here is the process to follow:</p>
+      <ul className='list-disc text-lg mb-6'>
+        <li>Register on www.ecitizen.go.ke </li> 
+        <li>Go to immigration.ecitizen.go.ke and or Department of immigration services  </li>
+        <li>Click on visa application </li> 
+        <li>Read the instructions carefully then fill the application form</li> 
+        <li>Select the mode of payment and pay for the passport fees. </li>
+        <li>Download and print the application form and three application receipts.</li> 
+        <li>Submit the application form in person to the Immigration offices.</li>
+        <li>Go with birth certificate, application form, original national ID, current passport photos</li>
+      </ul>
 
       <div className='text-center mb-8'>
          <a href='https://immigration.ecitizen.go.ke/index.php?id=5'
       target='_blank' rel='nonopener nonreferrer' 
       className='inline-block w-full bg-blue-500 text-white py-3 px-4 rounded-lg text-lg font-medium hover:bg-blue-600 transition duration-300 shadow-lg'> 
-      Apply Visa </a>
+      Apply for Visa </a>
       </div>
 
-      <h3 className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Visa </h3>
+      <p className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Visa document Image </p>
       <div className='flex flex-col items-center'>
-        <label 
-        className='cursor-pointer bg-blue-100 border border-blue-300 px-4 py-2 rounded-md shadow-sm text-black hover:bg-blue-200 duration-200 mb-4'>
-          Select File 
-          <input type='file' onChange={handleFileChange} className='hidden'></input>
-
-        </label>
-
-        {selectedFile && (
-          <p className='text-sm text-gray-600'> Selected file: <span className='font-medium'> {selectedFile.name}</span> </p>
-        )}
-
-        <button onClick={handleUpload} className='bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-400 transition duration-300 shadow-lg mt-4'>
-          Add Visa
-        </button>
+        <form onSubmit={handleSubmit}>
+          <label className='block text-lg font-semibold mb-2'> Upload Visa </label>
+          <input type='file' accept='.pdf,.doc,.docx' onChange={handleChange}
+          className='block w-full border p-2 rounded mb-4'/>
+          <button type='submit' className='bg-blue-600 text-white py-2 px-4 rounded shadow'>
+            Upload
+          </button>
+        </form>
       </div>
     </div>
   );
 }
 
-export default Resume
+export default Visa

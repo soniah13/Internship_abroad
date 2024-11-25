@@ -16,7 +16,7 @@ class CountrySerializer(serializers.ModelSerializer):
 
 class ApplicationSerializer(serializers.ModelSerializer):
     documents = serializers.PrimaryKeyRelatedField(
-        read_only=True, many=True
+        read_only=True, many=True, 
         )
     class Meta:
         model = Application
@@ -80,5 +80,9 @@ class DocumentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
+        instance, _ = Documents.objects.update_or_create(
+            user=self.context['request'].user,
+            defaults=validated_data
+        )
+        return instance
        

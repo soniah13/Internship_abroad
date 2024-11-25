@@ -6,7 +6,7 @@ from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import  api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status, permissions, viewsets, mixins
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
@@ -190,26 +190,73 @@ class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])   
-def DocumentListCreate(request):
-    if request.method == 'GET':
-        documents = Documents.objects.filter(user=request.user)
-        serializer = DocumentSerializer(documents, many=True)
+class DocumentViewSET(viewsets.ModelViewSet):
+    queryset = Documents.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+
+#restrict document to only the authenticated user
+    def get_queryset(self):
+        return Documents.objects.filter(user=self.request.user).order_by('-id')
+
+#associate new document to the authenticated user   
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+#handle post request to create or update document
+    def create(self, request, *args, **kwargs):
+        document_type = next(
+            (key for key in request.data.keys() if key in ['resume', 'passport', 'admission_letter', 'visa']),
+            None
+        )
+        if document_type:
+            existing_document = Documents.objects.filter(
+                user=request.user, **{document_type + '__isnull':False}
+            ).first()
+            if existing_document:
+                serializer = self.get_serializer(
+                    existing_document, data=request.data, partial=True
+                )
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            response = super().create(request, *args, **kwargs)
+            response.data[document_type] = request.build_absolute_uri(response.data[document_type])
+            return response
+        return super().create(request, *args, **kwargs)
+    
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+
+        for document in data:
+            for field in ['resume', 'passport', 'admission_letter', 'visa']:
+                if document.get(field):
+                    document[field] = request.build_absolute_uri(document[field])
+        return Response(data)
+    
+#handle the patch request 
+    def partial_updates(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
     
-    elif request.method == 'POST':
-        serializer = DocumentSerializer(data=request.data, context={'request':request})
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+#handle the put request 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
-    
-class DocumentDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Documents.objects.all().select_related('user')
-    serializer_class = DocumentSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 
 class ApplicationCreateView(generics.ListCreateAPIView):
@@ -219,10 +266,25 @@ class ApplicationCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         internship = serializer.validated_data['internship']
         applicant = self.request.user
+        documents = self.request.data.get('documents',  None)
+
         if internship.applicant_count >= internship.max_applications:
             raise serializers.ValidationError({"detail": "No more applications accepted for this internship"})
+        
         if Application.objects.filter(internship=internship, applicant=applicant).exists():
             raise serializers.ValidationError({ "detail":"You have already applied for this internship"})
+        
+        
+        application = serializer.save(applicant=applicant)
+        if documents:
+            if isinstance(documents, str):
+                application.documents = documents
+            else:
+                user_documents = Documents.objects.filter(user=applicant, id_in=documents)
+                if user_documents.count() != len(documents):
+                    raise serializers.ValidationError({"detail": "Invalid or unauthorized documents povided."})
+                application.documents.set(user_documents)
+
         internship.applicant_count += 1
         internship.save()
         serializer.save(applicant=applicant)

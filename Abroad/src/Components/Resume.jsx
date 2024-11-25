@@ -59,11 +59,11 @@ function Resume({ onComplete }) {
       Build Resume </a>
       </div>
 
-      <h3 className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Resume </h3>
+      <p className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Resume document as an image </p>
       <div className='flex flex-col items-center'>
         <form onSubmit={handleSubmit}>
           <label className='block text-lg font-semibold mb-2'> Upload Resume </label>
-          <input type='file' accept='.pdf,.doc,.docx' onChange={handleChange}
+          <input type='file' accept='*' onChange={handleChange}
           className='block w-full border p-2 rounded mb-4'/>
           <button type='submit' className='bg-blue-600 text-white py-2 px-4 rounded shadow'>
             Upload

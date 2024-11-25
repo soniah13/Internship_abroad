@@ -63,14 +63,7 @@ function AllJobApplication() {
                     <p className="text-lg sm:text-xl text-gray-700">
                         <strong>Location:</strong> {app.location}
                     </p>
-                    <a 
-                        href={app.resume_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-blue-600 hover:underline"
-                    >
-                        View Uploaded Documents
-                    </a>
+                    
                 </div>
             ))
         ) : (

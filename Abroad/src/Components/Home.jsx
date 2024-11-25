@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
 
-function Home({setUserType}) {
+
+function Home({}) {
     const flagImages = [
         '/src/assets/Images/Flags/Algeria.png','/src/assets/Images/Flags/Argentina.png','/src/assets/Images/Flags/Australia.png',
         '/src/assets/Images/Flags/Austria.png','/src/assets/Images/Flags/Belgium.png', '/src/assets/Images/Flags/Botswana.png',
@@ -24,11 +24,12 @@ function Home({setUserType}) {
          '/src/assets/Images/Flags/USA.png','/src/assets/Images/Flags/Uganda.png', '/src/assets/Images/Flags/Vietnam.png',
          '/src/assets/Images/Flags/Zambia.png','/src/assets/Images/Flags/Singapore.png','/src/assets/Images/Flags/Hong Kong.png'
       ];
+      
 
       const [shuffledFlags, setShuffledFlags] = useState([]);
       const [colourMap, setColourMap] = useState({});
-      const [searchText, setSearchText] = useState('');
-  
+
+
       const extractCountryName = (filePath) => {
           const nameWithExtension = filePath.split('/').pop();
           const name = nameWithExtension.split('.')[0];
@@ -75,14 +76,6 @@ function Home({setUserType}) {
           return () => window.removeEventListener('scroll', handleScroll);
       }, [shuffledFlags]);
   
-      const handleInputChange = (e) => {
-          setSearchText(e.target.value);
-      };
-  
-      const handleUser = (userType) => {
-          setUserType(userType);
-          localStorage.setItem('userType', userType);
-      };
   
       return (
           <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/src/assets/Images/lost.png)' }}>
@@ -98,9 +91,29 @@ function Home({setUserType}) {
                   </div>
   
                   <div className="flex flex-col items-center justify-center md:w-1/2 p-8 text-center">
-                      <h1 className="z-10 text-4xl font-bold text-white mb-8">WELCOME TO INTERNSHIP ABROAD</h1>
-                      
-                  </div>
+                    <h1 className="z-10 text-4xl font-bold text-white mb-8">WELCOME TO INTERNSHIP ABROAD</h1>
+                    <div
+                        className="z-10 rounded-lg p-8"
+                        style={{
+                        backgroundColor: "rgba(13, 42, 89, 0.4)", // Semi-transparent dark blue
+                        backdropFilter: "blur(8px)", // Frosted glass effect
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Soft shadow for separation
+                        }}
+                    >
+                        <p className="text-white text-lg leading-relaxed mb-4">
+                        Are you a student hoping to graduate ready to broaden your horizons, see beyond your set environment, and explore the world?
+                        </p>
+                        <p className="text-white text-lg leading-relaxed"> </p>
+                        Here at Internship Abroad, you can:
+                        <ul className="list-disc list-inside mt-2 text-xl">
+                            <li><strong>Identify Internship</strong></li>
+                            <li><strong>Apply for Internship</strong></li>
+                            <li><strong>Keep record of documents</strong></li>
+                            <li><strong>Learn what you're missing</strong></li>
+                        </ul>
+                       
+                    </div>
+                    </div>
               </div>
           </div>
       );

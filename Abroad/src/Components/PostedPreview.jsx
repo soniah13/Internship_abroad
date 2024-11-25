@@ -45,7 +45,7 @@ function PostedPreview() {
     const confirmDelete = async (confirm) => {
         if (confirm) {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/v1/employer/jobs/${jobId}`, {
+                const response = await fetch(`http://127.0.0.1:8000/api/v1/employer/jobs/${jobId}/`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('access')}`,

@@ -1,5 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('documents', DocumentViewSET, basename='documents')
 
 urlpatterns = [
     path('internships/', internships_list, name='internships_list'),
@@ -10,11 +14,10 @@ urlpatterns = [
     path('profile/employer/', employer_profile, name='employer_profile'),
     path('employer/jobs/', employer_job_list, name='employer_jobs'),
     path('employer/jobs/<int:pk>/', JobRetrieveUpdateDestroy.as_view(), name='preview_id'),
-    path('students/documents/', DocumentListCreate, name='documents'),
-    path('students/documents/<int:pk>/', DocumentDetailView.as_view(), name='document_detail'),
     path('applications/', ApplicationCreateView.as_view(), name='applications'),
     path('applications/<int:pk>/', ApplicationsRetrieveUpdateDestroy.as_view(), name='single_applications'),
-    path('employer/applications/', EmployerApplicationView.as_view(), name='employer_applications')
+    path('employer/applications/', EmployerApplicationView.as_view(), name='employer_applications'),
+    path('students/', include(router.urls)),
     
     
     

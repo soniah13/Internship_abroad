@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function JobPost({ countryName }) {
+function JobPost({ countryName, countryId }) {
   const [formData, setFormData] = useState({
     title: '',
     company_name: '',
-    country: countryName || '',
+    country: countryName || countryId,
     city: '',
     duration: '',
     majors: '',
@@ -34,8 +34,9 @@ function JobPost({ countryName }) {
   useEffect(() => {
 
     const savedCountryName = localStorage.getItem('countryName');
-    if(savedCountryName) {
-      setFormData((prev) => ({ ...prev, country: savedCountryName}));
+    const savedCountryId = localStorage.getItem('countryId');
+    if(savedCountryName && savedCountryId) {
+      setFormData((prev) => ({ ...prev, country: savedCountryId}));
     }
   }, []);
 

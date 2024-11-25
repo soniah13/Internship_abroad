@@ -67,13 +67,13 @@ function Jobs({internships = [], setInternships}) {
     <>
     <div className='w-full h-96 relative'>
         <img src="/src/assets/Images/jobs.png" alt="advertisement image" className='object-cover w-full h-96'/>
-        <div className='absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50'>
+        <div className='absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-60'>
             <h2 className='text-white font-semibold text-5xl text-center p-5'>
                 Kickstart your global internship journey today!
             </h2>
             <div className='mt-4 w-3/4 md:w-1/2'>
             <input type='text' placeholder='What do you want do?' value={search} onChange={handleSearch}
-            className='w-full p-3 mb-4 bg-gray-100 bg-opacity-40 text-white placeholder-white outline-none rounded-md'></input>
+            className='w-full p-3 mb-4 bg-white bg-opacity-50 text-white placeholder-white outline-none rounded-md'></input>
             
             <p className='text-white mt-2'>
                 {filteredInternships.length} internship{filteredInternships.length !== 1 && 's'} found
