@@ -4,6 +4,7 @@ import Passport from './Passport';
 import AdmissionLetter from './AdmissionLetter';
 import Visa from './Visa';
 import { TiTick } from "react-icons/ti";
+import AlertMessage from './AlertMessage';
 
 function StudentDocuments() {
     const [documentData, setDocumentData] = useState({
@@ -14,11 +15,18 @@ function StudentDocuments() {
     });
 
     const [selectedDocument, setSelectedDocument] = useState(null);
+    const [documentUploadStatus, setDocumentUploadStatus] = useState({
+        resume: false,
+        visa: false,
+        passport: false,
+        admission_letter: false,
+    });
     const [uploadMessage, setUploadMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false); // New state for confirmation modal
+    const [alertType, setAlertType] = useState("");
     const [documentToDelete, setDocumentToDelete] = useState(null); // Track which document to delete
 
+    // Load document from localStorage if available
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
@@ -35,40 +43,21 @@ function StudentDocuments() {
                         passport: data.passport || null,
                         admission_letter: data.admission_letter || null,
                     });
-
-                    setDocumentUploadStatus({
-                        resume: !!data.resume,
-                        visa: !!data.visa,
-                        passport: !!data.passport,
-                        admission_letter: !!data.admission_letter,
-                    });
-
-                    localStorage.setItem('documentData', JSON.stringify(data));
+                    
                 }
             } catch (error) {
                 console.error('Failed to fetch documents:', error);
             }
         };
 
-        const storedData = JSON.parse(localStorage.getItem('documentData'));
-        if (storedData) {
-            setDocumentData(storedData);
-            setDocumentUploadStatus({
-                resume: !!storedData.resume,
-                visa: !!storedData.visa,
-                passport: !!storedData.passport,
-                admission_letter: !!storedData.admission_letter,
-            });
-        } else {
-            fetchDocuments();
-        }
+        fetchDocuments();
+
     }, []);
 
     const handleSelectedDocument = (formType) => {
         setSelectedDocument(formType);
         setUploadMessage("");
     };
-    
 
     const uploadDocument = async (formType, file) => {
         setLoading(true);
@@ -82,9 +71,7 @@ function StudentDocuments() {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
                 body: formData,
-                
             });
-            console.log('the data',[...formData.entries()]);
 
             if (response.ok) {
                 const data = await response.json();
@@ -93,18 +80,17 @@ function StudentDocuments() {
                     [formType]: data[formType],
                 }));
 
-                setDocumentUploadStatus((prev) => ({
-                    ...prev,
-                    [formType]: true,
-                }));
 
                 setUploadMessage(`${formType.charAt(0).toUpperCase() + formType.slice(1)} uploaded successfully`);
+                setAlertType('success');
             } else {
                 setUploadMessage('Failed to upload the document.');
+                setAlertType('error');
             }
         } catch (error) {
             console.error('Error uploading document:', error);
             setUploadMessage('An error occurred during upload.');
+            setAlertType('error');
         }
         setLoading(false);
     };
@@ -119,22 +105,20 @@ function StudentDocuments() {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
             });
-            if (response.ok) {
             setDocumentData((prevData) => ({
                 ...prevData,
                 [documentToDelete]: null,
             }));
-            setDocumentUploadStatus((prevStatus) => ({
-                ...prevStatus,
-                [documentToDelete]: false,
-            }));
+
+            // Remove from localStorage
+            localStorage.removeItem('uploadedResume');
+
             setUploadMessage('Document deleted successfully');
-        } else {
-            setUploadMessage('Failed to delete the document.');
-        }
-        }
-        catch (error) {
+            setAlertType('success')
+        } catch (error) {
             console.error('Failed to delete document:', error);
+            setUploadMessage('Failed to delete the document.');
+            setAlertType('error')
         }
 
         setShowConfirmation(false); // Close modal after deletion
@@ -142,38 +126,47 @@ function StudentDocuments() {
     };
 
     const renderSelectedDocumentForm = () => {
-        if (!selectedDocument) return <p className='font-semibold text-3xl text-center'>SELECT A DOCUMENT TO UPLOAD OR EDIT.</p>;
+        const props = {
+            onComplete: (file) => uploadDocument(selectedDocument, file),
+        };
+
         switch (selectedDocument) {
             case 'resume':
-                return <Resume onComplete={(file) => uploadDocument('resume', file)} />;
+                return <Resume {...props} />;
             case 'visa':
-                return <Visa onComplete={(file) => uploadDocument('visa', file)} />;
+                return <Visa {...props} />;
             case 'admission_letter':
-                return <AdmissionLetter onComplete={(file) => uploadDocument('admission_letter', file)} />;
+                return <AdmissionLetter {...props} />;
             case 'passport':
-                return <Passport onComplete={(file) => uploadDocument('passport', file)} />;
+                return <Passport {...props} />;
             default:
-                return null;
+                return <p className='font-semibold text-xl text-center'> Select a document to upload or edit</p>;
         }
     };
 
     const renderDocumentPreview = (formType, label) => (
-        documentData[formType] && (
-            <div className='p-4 mt-4 mb-2 flex items-center justify-between bg-gray-200 rounded-lg shadow-lg hidden '  >
-                <div>
-                    <p className='text-2xl font-semibold text-gray-700'>{label}</p>
-                    <a href={documentData[formType]} target='_blank' rel='noopener noreferrer' className='text-blue-600 text-lg hover:underline'>
+        <div className='bg-gray-100 p-4 rounded-lg shadow-md mb-4'>
+            <h3 className='text-lg font-semibold text-gray-700 '>{label} </h3>
+            {documentData[formType] ? (
+                <div className='mt-2'>
+                    <a href={documentData[formType]} target='_blank' rel='noopener noreferrer' className='text-blue-800 hover:underline'>
                         View Document
                     </a>
+                    <div className='flex mt-2 space-x-2'>
+                        <button onClick={() => handleSelectedDocument(formType)}
+                            className='bg-green-600 text-white px-4 py-1 rounded hover:bg-green-900'>
+                                Edit
+                            </button>
+                        <button onClick={() => {setShowConfirmation(true); setDocumentToDelete(formType); }}
+                            className='bg-red-600 text-white px-4 py-1 rounded hover:bg-red-900'>
+                                Delete
+                            </button>
+                    </div>
                 </div>
-                <div className='flex mt-2'>
-                    <a href={documentData[formType]} download className='bg-blue-600 text-white rounded-md py-2 px-2 mr-2 hover:bg-blue-900' > DOWLOAD</a>
-                    <button onClick={() => handleSelectedDocument(formType)} className='bg-blue-600 text-white rounded-md py-2 px-2 mr-2 hover:bg-blue-900'>EDIT</button>
-                    <button onClick={() => { setShowConfirmation(true); setDocumentToDelete(formType); }} className='bg-red-600 text-white rounded-md py-2 px-2 ml-2 hover:bg-red-900'>DELETE</button>
-
-                </div>
-            </div>
-        )
+            ) : (
+                <p className='text-black font-semibold text-xl'> No document Uploaded </p>
+            )}
+        </div>
     );
 
     return (
@@ -182,39 +175,35 @@ function StudentDocuments() {
                 <h1 className="text-lg lg:text-4xl">DOCUMENTS REQUIRED FOR <span className='text-blue-300'>INTERNSHIP ABROAD</span></h1>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-6 p-6 bg-blue-100">
-                <div className="w-full lg:w-2/5 bg-gray-100 rounded-lg p-4 shadow-lg">
-                    <p className='text-xl text-black font-medium mb-4'>Upload documents here. Privacy has been ensured.</p>
-                    {['resume', 'visa', 'passport', 'admission_letter'].map((docType) => (
+            <div className="max-w-5xl mx-auto p-8">
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                    {['resume', 'visa', 'admission_letter', 'passport'].map((type) => (
                         <button
-                            key={docType}
-                            onClick={() => handleSelectedDocument(docType)}
-                            className={`w-full h-20 mb-4 text-lg font-semibold rounded-lg shadow-md flex items-center justify-center
-                             ${documentUploadStatus[docType] ? 'bg-green-200 text-green-800' : 'bg-white text-blue-800'}`}>
-                            {docType.replace('_', ' ').toUpperCase()} {documentUploadStatus[docType] && <TiTick size={24} />}
+                            key={type}
+                            onClick={() => handleSelectedDocument(type)}
+                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                        >
+                            {type.replace('_', ' ').toUpperCase()}
                         </button>
                     ))}
                 </div>
 
-                <div className="w-full lg:w-3/5 bg-blue-100 rounded-lg p-4 shadow-lg">
-                    {loading && <p className="text-center text-lg text-blue-700">Processing...</p>}
-                    {uploadMessage && <p className="text-center text-lg mb-4">{uploadMessage}</p>}
-                    {renderSelectedDocumentForm()}
-                    {Object.keys(documentData).map((key) => renderDocumentPreview(key, key.replace('_', ' ').toUpperCase()))}
-                </div>
-            </div>
+                <div className="mb-8">{renderSelectedDocumentForm()}</div>
 
-            {showConfirmation && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg shadow-lg text-center space-y-4">
-                        <p className="text-lg font-semibold">Are you sure you want to delete this document?</p>
-                        <div className="flex justify-center gap-4">
-                            <button onClick={() => setShowConfirmation(false)} className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-800">Yes</button>
-                            <button onClick={handleDocumentDelete} className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800">No</button>
-                        </div>
-                    </div>
+                <div>
+                    {['resume', 'visa', 'admission_letter', 'passport'].map((type) =>
+                        renderDocumentPreview(type, type.replace('_', ' ').toUpperCase())
+                    )}
                 </div>
-            )}
+
+                {uploadMessage && (
+                    <AlertMessage 
+                        message={uploadMessage} 
+                        type={alertType} 
+                        onClose={() => setUploadMessage("")} // Close the alert when the user clicks the close button
+                    />
+                )}
+            </div>
         </>
     );
 }

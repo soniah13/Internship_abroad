@@ -1,23 +1,7 @@
-import React, { useState } from 'react';
-import { usePopper} from 'react-popper';
+import React, { useState } from 'react'
 
 function Resume({ onComplete }) {
   const [resumeFile, setResumeFile] = useState(null);
-  const [ alertMessage, setAlertMessage] = useState(null);
-  const [showAlert, setShowAlert] = useState(false);
-  const [ referenceElement, setReferenceElement] = useState(null);
-  const [ popperElement, setPopperElement] = useState(null);
-  const {styles, attributes} = usePopper(referenceElement, popperElement, {
-    placement: 'top',
-    modifiers: [{ name: 'offset', options: {offset: [0, 10]}}],
-  });
-
-  const showAlertMessage = (message) => {
-    setAlertMessage(message);
-    setShowAlert(true);
-    setTimeout(() => setShowAlert(false), 10000);
-  };
-
 
   const handleChange = (e) => {
     setResumeFile(e.target.files[0]);
@@ -27,12 +11,12 @@ function Resume({ onComplete }) {
     e.preventDefault();
 
     if(!resumeFile) {
-      showAlertMessage("Please select a file to upload.");
+      alert("Please select a file to upload.");
       return;
     }
 
     if(!['application/pdf', 'application/doc', 'application/word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(resumeFile.type)) {
-      showAlertMessage("Pleasse upload a valid document(PDF, WORD).");
+      alert("Pleasse upload a valid document(PDF, WORD).");
       return;
     }
 
@@ -51,16 +35,16 @@ function Resume({ onComplete }) {
       if(response.ok) {
         const data = await response.json();
         onComplete(resumeFile); //notify studentdocument of successful upload
-        console.log("resume data", data.resume)
-        showAlertMessage('Resume uploaded successfully!');
+        console.log("resume data", resumeFile)
+        alert('Resume uploaded successfully!');
         setResumeFile(null);
       } else {
         console.log('Upload failes:', await response.json());
-        showAlertMessage('Failed to upload resume');
+        alert('Failed to upload resume');
       }
     } catch(error) {
       console.error('Uploading error', error);
-      showAlertMessage('Error occured while uploading resume.');
+      alert('Error occured while uploading resume.');
     }
   };
 
@@ -105,12 +89,6 @@ function Resume({ onComplete }) {
           </button>
         </form>
       </div>
-      {showAlert && (
-        <div ref={setPopperElement} style={styles.popper} {...attributes.popper}
-        className='bg-blue-300 text-white text-base py-2 px-4 rounded shadow-lg transition-opacity'>
-          {alertMessage}
-        </div>
-      )}
     </div>
   );
 }
