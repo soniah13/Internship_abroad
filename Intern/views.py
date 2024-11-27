@@ -205,10 +205,16 @@ class DocumentViewSET(viewsets.ModelViewSet):
 
 #handle post request to create or update document
     def create(self, request, *args, **kwargs):
+        print("request data", request.data)
         document_type = next(
             (key for key in request.data.keys() if key in ['resume', 'passport', 'admission_letter', 'visa']),
             None
         )
+        if not document_type:
+            return Response(
+                {"error": "Invaid document type or file provided."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         if document_type:
             existing_document = Documents.objects.filter(
                 user=request.user, **{document_type + '__isnull':False}

@@ -34,7 +34,9 @@ function JobPost({ countryName, countryId }) {
   useEffect(() => {
 
     const savedCountryName = localStorage.getItem('countryName');
+    console.log('name', savedCountryName)
     const savedCountryId = localStorage.getItem('countryId');
+    console.log('id', savedCountryId)
     if(savedCountryName && savedCountryId) {
       setFormData((prev) => ({ ...prev, country: savedCountryId}));
     }
@@ -137,10 +139,14 @@ function JobPost({ countryName, countryId }) {
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"  name="country"  placeholder="Country"  value={formData.country}  onChange={handleChange}  disabled
+        type="text"  name="country"  placeholder="Country"  value={formData.country}  onChange={handleChange}  disabled hidden
       />
-      <p className='p-2'>* country has already been filled for you </p>
+      <p className='p-2'>* fill located at form first </p>
       {errors.country && <p className="text-red-500 mb-4">{errors.country}</p>}
+      <input
+        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        type="text"  name="country_name"  placeholder="Country"  value={localStorage.getItem('countryName')}  disabled
+      />{console.log(formData)}
 
       <input
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"

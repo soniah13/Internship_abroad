@@ -14,12 +14,6 @@ function StudentDocuments() {
     });
 
     const [selectedDocument, setSelectedDocument] = useState(null);
-    const [documentUploadStatus, setDocumentUploadStatus] = useState({
-        resume: false,
-        visa: false,
-        passport: false,
-        admission_letter: false,
-    });
     const [uploadMessage, setUploadMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false); // New state for confirmation modal
@@ -88,7 +82,9 @@ function StudentDocuments() {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
                 body: formData,
+                
             });
+            console.log('the data',[...formData.entries()]);
 
             if (response.ok) {
                 const data = await response.json();
@@ -100,11 +96,6 @@ function StudentDocuments() {
                 setDocumentUploadStatus((prev) => ({
                     ...prev,
                     [formType]: true,
-                }));
-
-                localStorage.setItem('documentData', JSON.stringify({
-                    ...documentData,
-                    [formType]: data[formType],
                 }));
 
                 setUploadMessage(`${formType.charAt(0).toUpperCase() + formType.slice(1)} uploaded successfully`);
@@ -128,6 +119,7 @@ function StudentDocuments() {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
             });
+            if (response.ok) {
             setDocumentData((prevData) => ({
                 ...prevData,
                 [documentToDelete]: null,
@@ -136,8 +128,12 @@ function StudentDocuments() {
                 ...prevStatus,
                 [documentToDelete]: false,
             }));
-            setUploadMessage('');
-        } catch (error) {
+            setUploadMessage('Document deleted successfully');
+        } else {
+            setUploadMessage('Failed to delete the document.');
+        }
+        }
+        catch (error) {
             console.error('Failed to delete document:', error);
         }
 
@@ -182,26 +178,27 @@ function StudentDocuments() {
 
     return (
         <>
-            <div className="bg-blue-900 h-80 w-full p-4 text-white font-bold text-center flex items-center justify-center">
-                <h1 className="text-lg lg:text-4xl">DOCUMENTS REQUIRED FOR <span className='text-blue-200'>INTERNSHIP ABROAD</span></h1>
+            <div className="bg-blue-900 h-80 w-full text-center flex items-center justify-center text-white font-bold">
+                <h1 className="text-lg lg:text-4xl">DOCUMENTS REQUIRED FOR <span className='text-blue-300'>INTERNSHIP ABROAD</span></h1>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-6 p-4 bg-blue-100">
-                <div className="w-full lg:w-2/5 bg-gray-100 shadow-lg rounded-lg p-4 sm:p-6 lg:p-8 space-y-4">
-                    <p className='text-xl text-black font-medium'>Upload documents here. Privacy has been ensured</p>
-
+            <div className="flex flex-col lg:flex-row gap-6 p-6 bg-blue-100">
+                <div className="w-full lg:w-2/5 bg-gray-100 rounded-lg p-4 shadow-lg">
+                    <p className='text-xl text-black font-medium mb-4'>Upload documents here. Privacy has been ensured.</p>
                     {['resume', 'visa', 'passport', 'admission_letter'].map((docType) => (
                         <button
-                            key={docType} onClick={() => handleSelectedDocument(docType)}
-                            className={`w-full h-24 text-blue-600 text-2xl font-semibold rounded-lg shadow-lg flex items-center justify-center
-                             ${documentUploadStatus[docType] ? 'bg-green-200' : 'bg-white'}`}>
-                            {docType.toUpperCase().replace('_', ' ')} {documentUploadStatus[docType] && <TiTick size={32} />}
+                            key={docType}
+                            onClick={() => handleSelectedDocument(docType)}
+                            className={`w-full h-20 mb-4 text-lg font-semibold rounded-lg shadow-md flex items-center justify-center
+                             ${documentUploadStatus[docType] ? 'bg-green-200 text-green-800' : 'bg-white text-blue-800'}`}>
+                            {docType.replace('_', ' ').toUpperCase()} {documentUploadStatus[docType] && <TiTick size={24} />}
                         </button>
                     ))}
                 </div>
 
-                <div className='w-full lg:w-3/5 bg-blue-100 p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg'>
-                    {uploadMessage && <p className="text-xl text-center mb-6">{uploadMessage}</p>}
+                <div className="w-full lg:w-3/5 bg-blue-100 rounded-lg p-4 shadow-lg">
+                    {loading && <p className="text-center text-lg text-blue-700">Processing...</p>}
+                    {uploadMessage && <p className="text-center text-lg mb-4">{uploadMessage}</p>}
                     {renderSelectedDocumentForm()}
                     {Object.keys(documentData).map((key) => renderDocumentPreview(key, key.replace('_', ' ').toUpperCase()))}
                 </div>
@@ -212,8 +209,8 @@ function StudentDocuments() {
                     <div className="bg-white p-6 rounded-lg shadow-lg text-center space-y-4">
                         <p className="text-lg font-semibold">Are you sure you want to delete this document?</p>
                         <div className="flex justify-center gap-4">
-                            <button onClick={handleDocumentDelete} className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Yes, Delete</button>
-                            <button onClick={() => setShowConfirmation(false)} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
+                            <button onClick={() => setShowConfirmation(false)} className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-800">Yes</button>
+                            <button onClick={handleDocumentDelete} className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800">No</button>
                         </div>
                     </div>
                 </div>

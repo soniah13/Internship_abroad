@@ -24,6 +24,7 @@ function PostedPreview() {
                 }
 
                 const data = await response.json();
+                console.log('preview', data)
                 if (data && data.id) {
                     setJob(data);
                 } else {
