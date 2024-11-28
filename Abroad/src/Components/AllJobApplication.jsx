@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function AllJobApplication() {
     const {jobId} = useParams();
+    const navigate = useNavigate();
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -22,11 +23,18 @@ function AllJobApplication() {
             setLoading(false);
           }
         }
-        console.log('Job ID:', jobId);
+        
         fetchApplications();
     }, [jobId]);
 
     if(loading) return <p>Loading...</p>
+
+    const downloadFile = () => {
+        const link = documet.createElement('a');
+        link.href = formData.documents;
+        link.download = formData.documents.split('/').pop();
+        link.click();
+    }
   return (
     <>
     
@@ -63,6 +71,7 @@ function AllJobApplication() {
                     <p className="text-lg sm:text-xl text-gray-700">
                         <strong>Location:</strong> {app.location}
                     </p>
+                    <button onClick={downloadFile} className='bg-blue-600 text-white hover:bg-blue-900 rounded-md shadow-lg py-2 px-2 mt-2'>Download Resume</button>
                     
                 </div>
             ))

@@ -67,7 +67,7 @@ function JobPost({ countryName, countryId }) {
       const intenshipsResponse = await fetch('http://127.0.0.1:8000/api/v1/internships/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access')}`,
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
         },
         body: formDataToSend,
       });
@@ -76,7 +76,7 @@ function JobPost({ countryName, countryId }) {
         const employerJobResponse = await fetch ("http://127.0.0.1:8000/api/v1/employer/jobs/", {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            Authorization: `Bearer ${localStorage.getItem('access')}`
           }, 
           body: formDataToSend,
         });

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import AlertMessage from './AlertMessage';
 
 function ApplicationForm() {
     const {id} = useParams(); //internship ID
@@ -15,6 +16,8 @@ function ApplicationForm() {
     const [employerId, setEmployerId] = useState(null); //store employer id
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
+    const [uploadMessage, setUploadMessage] = useState("");
+    const [alertType, setAlertType] = useState("");
 
     useEffect(() => {
         async function fetchInternshipDetails() {
@@ -34,33 +37,27 @@ function ApplicationForm() {
                 console.log('Error occured while fetching', error);
             }   
         }
+
+        function loadResume() {
+            const storeDocumentData = localStorage.getItem('documentData');
+            if (storeDocumentData){
+                try {
+                    const documentData = JSON.parse(storeDocumentData);
+                    if (documentData.resume) {
+                        setFormData((prev) => ({
+                            ...prev,
+                            documents: documentData.resume,
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Error parsing document data from local storage', error);
+                }
+            }
+        }
         fetchInternshipDetails();
+        loadResume();
     }, [id])
 
-    useEffect(() => {
-        async function fetchResume() {
-            try{
-                const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('access')}`,
-                    },
-                });
-                if(response.ok) {
-                    const data = await response.json();
-                    if(data.resume) {
-                        console.log("Fetched resume url:", data.resume)
-                        //const resumeUrl = `https://res.cloudinary.com/ddqkfdqy8/${data.resume}`;
-                        setFormData((prev) => ({ ...prev, documents: data.resume }));
-                    }
-                } else {
-                    console.warn('Resume not upload.');
-                }
-            } catch(error) {
-                console.log('Error fetching resume:', error);
-            }
-        };
-        fetchResume();
-    },[]);
 
     const handleChange = (e) => {
         const {name, files, value } = e.target;
@@ -101,15 +98,18 @@ function ApplicationForm() {
             });
             if(response.ok) {
                 const data = await response.json();
-                setMessage('Application submitted successfully!');
+                setUploadMessage('Application submitted successfully!');
+                setAlertType('success');
                 navigate('/jobs')
             } else {
                 const errorData = await response.json();
-                setMessage(errorData.detail || 'Failed to submit application, try again');
+                setUploadMessage(errorData.detail || 'Failed to submit application, try again');
+                setAlertType('error')
             }
         } catch (error) {
             console.log(error)
-            setMessage('an error occured')
+            setUploadMessage('an error occured')
+            setAlertType('error')
         }
         setLoading(false);
     };
@@ -175,6 +175,13 @@ function ApplicationForm() {
                         </div>
                     </div>
                 </div>
+                {uploadMessage && (
+                    <AlertMessage 
+                        message={uploadMessage} 
+                        type={alertType} 
+                        onClose={() => setUploadMessage("")} // Close the alert when the user clicks the close button
+                    />
+                )}
     </div>
     </div>
 

@@ -14,6 +14,10 @@ function Passport({ onComplete }) {
       alert("Please select a file to upload.");
       return;
     }
+    if(!['application/pdf', 'application/doc', 'application/word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(passportFile.type)) {
+      alert("Pleasse upload a valid document(PDF, WORD).");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('passport', passportFile);
@@ -29,7 +33,8 @@ function Passport({ onComplete }) {
 
       if(response.ok) {
         const data = await response.json();
-        onComplete(data.url); //notify studentdocument of successful upload
+        onComplete(passportFile); //notify studentdocument of successful upload
+        
       } else {
         console.log('Upload failes:', await response.json());
         alert('Failed to upload visa');
@@ -65,13 +70,17 @@ function Passport({ onComplete }) {
       Apply for Passport </a>
       </div>
 
-      <h3 className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Passport Image </h3>
+      <h3 className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Passport document as word or pdf </h3>
       <div className='flex flex-col items-center'>
-        <form onSubmit={handleSubmit}>
-          <label className='block text-lg font-semibold mb-2'> Upload Passport </label>
-          <input type='file' accept='.pdf,.doc,.docx' onChange={handleChange}
-          className='block w-full border p-2 rounded mb-4'/>
-          <button type='submit' className='bg-blue-600 text-white py-2 px-4 rounded shadow'>
+      <form onSubmit={handleSubmit}>
+          <label className="block text-lg font-semibold mb-2">Upload Passport</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={handleChange}
+            className="block w-full border p-2 rounded mb-4"
+          />
+          <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 transition">
             Upload
           </button>
         </form>

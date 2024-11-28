@@ -13,7 +13,7 @@ function EmployerJobs() {
         const response = await fetch("http://127.0.0.1:8000/api/v1/employer/jobs/", {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access')}`,
+            Authorization: `Bearer ${localStorage.getItem('access')}`,
           },
         });
 
@@ -22,7 +22,12 @@ function EmployerJobs() {
         }
 
         const data = await response.json();
-        setJobData(data.jobs); // Assuming `data.jobs` is an array of job objects
+        const jobsWithApplications = data.jobs.map(job => ({
+          ...job,
+          applications: job.applications || [],
+
+        }))
+        setJobData(jobsWithApplications); 
       } catch (error) {
         setError(error.message);
       } finally {
@@ -50,7 +55,7 @@ function EmployerJobs() {
             <div className='flex flex-col'>
             <h3 className='text-2xl' ><span className='text-2xl font-semibold'>Title:</span> {job.job.title}</h3>
             <p className='text-2xl'><span className='text-2xl font-semibold'>City:</span> {job.job.city}</p>
-            <p className='text-2xl'><span className='text-2xl font-semibold'>Number of applications:</span> {job.job.applicant_count}</p>
+            <p className='text-2xl'><span className='text-2xl font-semibold'>Number of applications:</span> {job.job.applicant_count || 0}</p>
             <p className='text-2xl'><span className='text-2xl font-semibold'>Applicants needed:</span> {job.job.max_applications}</p>
             </div>
 

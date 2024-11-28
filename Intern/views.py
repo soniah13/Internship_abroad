@@ -274,6 +274,9 @@ class ApplicationCreateView(generics.ListCreateAPIView):
         applicant = self.request.user
         documents = self.request.data.get('documents',  None)
 
+        if internship.employer != applicant.employer_profile:
+            raise serializers.ValidationError({"detail": "You can only appliy to valid internships."})
+
         if internship.applicant_count >= internship.max_applications:
             raise serializers.ValidationError({"detail": "No more applications accepted for this internship"})
         
@@ -314,6 +317,7 @@ class EmployerApplicationView(APIView):
 
     def get(self, request):
         internship_id = request.GET.get('internship')
+        
         if not internship_id:
             return Response({'detail': "Internship ID is required."}, status=400)
         

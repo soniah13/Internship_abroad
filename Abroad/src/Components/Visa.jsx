@@ -15,6 +15,11 @@ function Visa({ onComplete }) {
       return;
     }
 
+    if(!['application/pdf', 'application/doc', 'application/word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(visaFile.type)) {
+      alert("Pleasse upload a valid document(PDF, WORD).");
+      return;
+    }
+
     const formData = new FormData();
     formData.append('visa', visaFile);
 
@@ -22,20 +27,23 @@ function Visa({ onComplete }) {
       const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/',{
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access')}`
+          Authorization: `Bearer ${localStorage.getItem('access')}`
         }, body: formData,
       });
       
 
       if(response.ok) {
         const data = await response.json();
-        onComplete(data.url); //notify studentdocument of successful upload
+        onComplete(visaFile); //notify studentdocument of successful upload
+        
+        
       } else {
         console.log('Upload failes:', await response.json());
         alert('Failed to upload visa');
       }
     } catch(error) {
       console.error('Uploading error', error);
+      alert('Error occured while uploading visa.');
     }
   };
 
@@ -65,13 +73,17 @@ function Visa({ onComplete }) {
       Apply for Visa </a>
       </div>
 
-      <p className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your Visa document Image </p>
+      <p className='text-xl font-medium text-blue-600 mb-4 text-center'> Upload Your visa Document as a pdf or word format  </p>
       <div className='flex flex-col items-center'>
-        <form onSubmit={handleSubmit}>
-          <label className='block text-lg font-semibold mb-2'> Upload Visa </label>
-          <input type='file' accept='.pdf,.doc,.docx' onChange={handleChange}
-          className='block w-full border p-2 rounded mb-4'/>
-          <button type='submit' className='bg-blue-600 text-white py-2 px-4 rounded shadow'>
+      <form onSubmit={handleSubmit}>
+          <label className="block text-lg font-semibold mb-2">Upload Visa</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={handleChange}
+            className="block w-full border p-2 rounded mb-4"
+          />
+          <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 transition">
             Upload
           </button>
         </form>

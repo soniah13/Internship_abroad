@@ -8,10 +8,12 @@ import AlertMessage from './AlertMessage';
 
 function StudentDocuments() {
     const [documentData, setDocumentData] = useState({
-        resume: null,
-        visa: null,
-        passport: null,
-        admission_letter: null,
+        return :{
+            resume: localStorage.getItem('resume') || null,
+            visa: localStorage.getItem('visa') || null,
+            passport: localStorage.getItem('passport') || null,
+            admission_letter: localStorage.getItem('admission_letter') || null,
+        }
     });
 
     const [selectedDocument, setSelectedDocument] = useState(null);
@@ -19,8 +21,8 @@ function StudentDocuments() {
         resume: false,
         visa: false,
         passport: false,
-        admission_letter: false,
-    });
+        admission_letter: false
+    })
     const [uploadMessage, setUploadMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [alertType, setAlertType] = useState("");
@@ -28,36 +30,18 @@ function StudentDocuments() {
 
     // Load document from localStorage if available
     useEffect(() => {
-        const fetchDocuments = async () => {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('access')}`,
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setDocumentData({
-                        resume: data.resume || null,
-                        visa: data.visa || null,
-                        passport: data.passport || null,
-                        admission_letter: data.admission_letter || null,
-                    });
-                    
-                }
-            } catch (error) {
-                console.error('Failed to fetch documents:', error);
-            }
-        };
-
-        fetchDocuments();
+        const storedDocuments = JSON.parse(localStorage.getItem('documentData'));
+        if (storedDocuments) {
+            setDocumentData(storedDocuments);
+            const status = Object.keys(storedDocuments).reduce((acc, key) => {
+                acc[key] = !!storedDocuments[key];
+                return acc;
+            }, {});
+            setDocumentUploadStatus(status);
+        }
 
     }, []);
 
-    const handleSelectedDocument = (formType) => {
-        setSelectedDocument(formType);
-        setUploadMessage("");
-    };
 
     const uploadDocument = async (formType, file) => {
         setLoading(true);
@@ -75,11 +59,20 @@ function StudentDocuments() {
 
             if (response.ok) {
                 const data = await response.json();
-                setDocumentData((prev) => ({
-                    ...prev,
-                    [formType]: data[formType],
-                }));
+                setDocumentData((prev) => {
+                    const updatedData = {
+                        ...prev,
+                        [formType]: data[formType]
+                    }
+                    localStorage.setItem('documentData', JSON.stringify(updatedData));
+                    return updatedData;
+                });
 
+                setDocumentUploadStatus((prev) => {
+                    const updatedStatus = { ...prev, [formType]: true};
+                    localStorage.setItem('documentUploadStatus', JSON.stringify(updatedStatus));
+                    return updatedStatus;
+                })
 
                 setUploadMessage(`${formType.charAt(0).toUpperCase() + formType.slice(1)} uploaded successfully`);
                 setAlertType('success');
@@ -105,24 +98,40 @@ function StudentDocuments() {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
                 },
             });
-            setDocumentData((prevData) => ({
-                ...prevData,
-                [documentToDelete]: null,
-            }));
+            if (response.ok) {
+                setDocumentData((prevData) => {
+                    const updatedData = {...prevData, [documentToDelete]: null};
+                    localStorage.setItem('documentData', JSON.stringify(updatedData));
+                    return updatedData;
+                });
 
-            // Remove from localStorage
-            localStorage.removeItem('uploadedResume');
+                setDocumentUploadStatus((prevStatus) => {
+                    const updatedStatus = { ...prevStatus, [documentToDelete]: false};
+                    localStorage.setItem('documentUploadStatus', JSON.stringify(updatedStatus));
+                    return updatedStatus;
+                })
 
-            setUploadMessage('Document deleted successfully');
-            setAlertType('success')
+                setUploadMessage('Document deleted successfully');
+                setAlertType('success')
+            } else {
+                setUploadMessage('Failed to delete the document.');
+                setAlertType('error')
+            }
+            
+
         } catch (error) {
             console.error('Failed to delete document:', error);
-            setUploadMessage('Failed to delete the document.');
-            setAlertType('error')
+            setUploadMessage('Error occured during deletion');
+            setAlertType('error');
         }
 
-        setShowConfirmation(false); // Close modal after deletion
+        
         setDocumentToDelete(null); // Reset document to delete
+    };
+
+    const handleSelectedDocument = (formType) => {
+        setSelectedDocument(formType);
+        setUploadMessage("");
     };
 
     const renderSelectedDocumentForm = () => {
@@ -157,7 +166,7 @@ function StudentDocuments() {
                             className='bg-green-600 text-white px-4 py-1 rounded hover:bg-green-900'>
                                 Edit
                             </button>
-                        <button onClick={() => {setShowConfirmation(true); setDocumentToDelete(formType); }}
+                        <button onClick={() => setDocumentToDelete(formType)}
                             className='bg-red-600 text-white px-4 py-1 rounded hover:bg-red-900'>
                                 Delete
                             </button>

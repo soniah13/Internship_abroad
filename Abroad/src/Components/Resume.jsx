@@ -36,8 +36,8 @@ function Resume({ onComplete }) {
         const data = await response.json();
         onComplete(resumeFile); //notify studentdocument of successful upload
         console.log("resume data", resumeFile)
-        alert('Resume uploaded successfully!');
-        setResumeFile(null);
+        
+        
       } else {
         console.log('Upload failes:', await response.json());
         alert('Failed to upload resume');
@@ -72,12 +72,12 @@ function Resume({ onComplete }) {
       </div>
 
       <p className="text-xl font-medium text-blue-600 mb-4 text-center">
-        Upload Your Resume Document as a Document
+        Upload Your Resume Document as a pdf or word format
       </p>
 
       <div className="flex flex-col items-center">
         <form onSubmit={handleSubmit}>
-          <label className="block text-lg font-semibold mb-2">Upload Resume</label>
+          <label className="block text-lg font-semibold mb-2">Upload Resume document</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"
