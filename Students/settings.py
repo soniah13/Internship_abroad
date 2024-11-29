@@ -29,14 +29,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h#y$2eqk5fe$th%avw$$#5@ug#$d0re*3vyqcp72ut3xf(7+1p'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
-
+CRSF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(',')
 
 
 
@@ -57,9 +57,9 @@ INSTALLED_APPS = [
 ]
 
 cloudinary.config( 
-  cloud_name = "ddqkfdqy8", 
-  api_key = "637138692528623", 
-  api_secret = "OgL-pPuhtTuDdd2Mqq39Aeq2LNg",
+  cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'), 
+  api_key = os.getenv('CLOUDINARY_API_KEY'), 
+  api_secret = os.getenv('CLOUDINARY_API_SECRET'),
   secure = True
 )
 
@@ -106,15 +106,10 @@ WSGI_APPLICATION = 'Students.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Internship_db',
-        'USER': 'Imo',
-        'PASSWORD': 'Parrot13',
-        'HOST': 'localhost',
-        'PORT': '5433',
-        
-    }
+    'default': dj_database_url.config(
+        default= os.getenv('DATABASE_URL'),
+        conn_max_age=600
+    )
 }
 
 
@@ -153,6 +148,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+if not DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

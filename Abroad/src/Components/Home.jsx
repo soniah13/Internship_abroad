@@ -103,9 +103,9 @@ function Home({}) {
                         <p className="text-white text-lg leading-relaxed mb-4">
                         Are you a student hoping to graduate ready to broaden your horizons, see beyond your set environment, and explore the world?
                         </p>
-                        <p className="text-white text-lg leading-relaxed"> </p>
-                        Here at Internship Abroad, you can:
-                        <ul className="list-disc list-inside mt-2 text-xl">
+                        <p className="text-white text-lg leading-relaxed">Here at Internship Abroad, you can: </p>
+                        
+                        <ul className="list-disc list-inside mt-2 text-xl text-white">
                             <li><strong>Identify Internship</strong></li>
                             <li><strong>Apply for Internship</strong></li>
                             <li><strong>Keep record of documents</strong></li>

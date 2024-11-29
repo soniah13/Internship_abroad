@@ -91,20 +91,28 @@ class Documents(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Documents"
-    
+
+def application_directory_path(instance, filename):
+    sanitized_name = ''.join(e for e in instance.applicant_name if e.isalnum())
+    return f'store/applications/{sanitized_name}/{filename}'
+
+def validate_resumeFile_extension(value):
+    if not value.name.endswith(('.pdf','.doc','.docx')):
+        raise ValidationError('Invalid file type, only pdf, doc, docx type files are allowed.')
+     
 class Application(models.Model):
     internship = models.ForeignKey(Internship, on_delete=models.CASCADE, related_name="applications")
-    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, limit_choices_to={'role': 'student'}, blank=True, null=True)
+    student = models.ForeignKey(UserProfile, on_delete=models.CASCADE, limit_choices_to={'role': 'student'}, blank=True, null=True)
     applicant_name = models.CharField(max_length=100)
     applicant_email = models.EmailField()
     contact = models.CharField(max_length=15, default='07-0000-0000')
     location = models.CharField(max_length=100, default='country')
-    documents = models.ManyToManyField(Documents, blank=True, related_name='applications')
+    resume_document = models.FileField(upload_to=application_directory_path, validators=[validate_resumeFile_extension], blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
 
     class Meta:
-        unique_together = ('internship', 'applicant')
+        unique_together = ('internship', 'student')
     
     def __str__(self):
         return f"{self.applicant_name} - {self.internship.title}"

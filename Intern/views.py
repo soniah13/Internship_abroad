@@ -3,8 +3,9 @@ from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
+import logging
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import  api_view, permission_classes
+from rest_framework.decorators import  api_view, permission_classes, action
 from rest_framework.response import Response
 from rest_framework import generics, status, permissions, viewsets, mixins
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -265,52 +266,55 @@ class DocumentViewSET(viewsets.ModelViewSet):
 
 
 
-class ApplicationCreateView(generics.ListCreateAPIView):
+class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
+        student = self.request.user
         internship = serializer.validated_data['internship']
-        applicant = self.request.user
-        documents = self.request.data.get('documents',  None)
-
-        if internship.employer != applicant.employer_profile:
-            raise serializers.ValidationError({"detail": "You can only appliy to valid internships."})
-
-        if internship.applicant_count >= internship.max_applications:
-            raise serializers.ValidationError({"detail": "No more applications accepted for this internship"})
-        
-        if Application.objects.filter(internship=internship, applicant=applicant).exists():
-            raise serializers.ValidationError({ "detail":"You have already applied for this internship"})
-        
-        
-        application = serializer.save(applicant=applicant)
-        if documents:
-            if isinstance(documents, str):
-                application.documents = documents
-            else:
-                user_documents = Documents.objects.filter(user=applicant, id_in=documents)
-                if user_documents.count() != len(documents):
-                    raise serializers.ValidationError({"detail": "Invalid or unauthorized documents povided."})
-                application.documents.set(user_documents)
-
-        internship.applicant_count += 1
-        internship.save()
-        serializer.save(applicant=applicant)
+      
+        # Check if an application from the same student for the same internship exists
+        if Application.objects.filter(internship=internship, student=student).exists():
+            raise ValidationError({"detail": "You have already applied for this internship"})
+        # Save the new application if no previous one exists
+        serializer.save(student=student)
 
     def get_queryset(self):
-        return Application.objects.filter(applicant=self.request.user)
+        # Return applications related to the current logged-in user (as applicant)
+        return Application.objects.filter(student=self.request.user)
 
+    @action(detail=True, methods=['patch'])
+    def update_application(self, request):
+        # Get the application object
+        application = self.get_object()
+
+        # Ensure the user is the applicant for this application
+        if application.student != self.request.user:
+            raise permissions.PermissionDenied("You do not have permission to update this application.")
+        
+        # Update fields here (e.g., applicant_name, contact)
+        serializer = self.get_serializer(application, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+# Retrieve, Update, and Destroy application
 class ApplicationsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Application.objects.all().select_related('internship', 'applicant')
+    queryset = Application.objects.all().select_related('internship', 'student')
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def get_object(self):
         obj = super().get_object()
-        if obj.applicant != self.request.user:
+        
+        # Ensure only the applicant can access their own applications
+        if obj.student != self.request.user:
             raise permissions.PermissionDenied("You do not have permission to access this application.")
+        
         return obj
+
 
 class EmployerApplicationView(APIView):
     permission_classes = [permissions.IsAuthenticated]

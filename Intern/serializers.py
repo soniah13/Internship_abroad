@@ -15,15 +15,16 @@ class CountrySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    documents = serializers.PrimaryKeyRelatedField(
-        read_only=True, many=True, 
-        )
+    internship = serializers.PrimaryKeyRelatedField(queryset=Internship.objects.all())
+    
     class Meta:
         model = Application
-        fields = '__all__'
-        extra_kwargs = {
-            'applicant': {'read_only': True},
-            }
+        fields = ['student', 'internship', 'applicant_name', 'applicant_email', 'contact', 'location', 'resume_document']
+        read_only_fields = ['student']
+
+    def create(self, validated_data):
+        validated_data['student'] = self.context['request'].user  # Automatically link the student from the logged-in user
+        return super().create(validated_data)
 
 
 class UserSerializer(serializers.ModelSerializer):

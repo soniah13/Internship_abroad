@@ -52,11 +52,11 @@ function Country() {
 
       if (response.ok) {
         const responseData = await response.json();
-        localStorage.setItem('countryId', responseData.id)
+        localStorage.setItem('countryId', responseData.id);
         localStorage.setItem('countryName', responseData.name);
 
         setCountryId(responseData.id);
-        setCountryName(responseData.name)
+        setCountryName(responseData.name);
         setShowJobPostForm(true);
 
         setFormData({
@@ -80,53 +80,74 @@ function Country() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <div className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
+      {/* Error message display (if any) */}
+      {errors.global && (
+        <div className="bg-red-500 text-white p-3 rounded mb-4 flex justify-between items-center">
+          <p className="font-semibold">{errors.global}</p>
+          <button
+            onClick={() => setErrors({})}
+            className="text-white font-bold bg-transparent hover:bg-white hover:text-black rounded-full p-1"
+          >
+            X
+          </button>
+        </div>
+      )}
+
       <h1 className="text-2xl font-bold mb-6 text-center">Internship Location Details</h1>
-      
-      {errors.global && <p className="text-red-500 mb-4 text-center">{errors.global}</p>}
 
-      <input
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        type="text"
-        name="name"
-        placeholder="Country Name"
-        value={formData.name}
-        onChange={handleChange}
-        required
-      />
-      {errors.name && <p className="text-red-500 mb-4">{errors.name}</p>}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <input
+            className={`w-full p-3 border rounded focus:outline-none focus:border-blue-500 ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+            type="text"
+            name="name"
+            placeholder="Country Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+        </div>
 
-      <select
-        name="continent"
-        value={formData.continent}
-        onChange={handleChange}
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
-      >
-        <option value="" disabled>Select Continent</option>
-        {CONTINENTS.map((level) => (
-          <option key={level} value={level}>
-            {level}
-          </option>
-        ))}
-      </select>
-      {errors.continent && <p className="text-red-500 mb-4">{errors.continent}</p>}
+        <div className="mb-4">
+          <select
+            name="continent"
+            value={formData.continent}
+            onChange={handleChange}
+            className={`w-full p-3 border rounded focus:outline-none focus:border-blue-500 ${errors.continent ? 'border-red-500' : 'border-gray-300'}`}
+            required
+          >
+            <option value="" disabled>Select Continent</option>
+            {CONTINENTS.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+          {errors.continent && <p className="text-red-500 text-sm mt-1">{errors.continent}</p>}
+        </div>
 
-      <input
-        type="file"
-        name="flag"
-        onChange={handleFileChange}
-        placeholder="flag image"
-        className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        required
-      />
-      <p className='text-gray-900 text-sm mt-1'> please add a flag image </p>
-      {errors.flag && <p className="text-red-500 mb-4">{errors.flag}</p>}
+        <div className="mb-4">
+          <input
+            type="file"
+            name="flag"
+            onChange={handleFileChange}
+            className={`w-full p-3 border rounded focus:outline-none focus:border-blue-500 ${errors.flag ? 'border-red-500' : 'border-gray-300'}`}
+            required
+          />
+          <p className="text-gray-900 text-sm mt-1">Please add a flag image</p>
+          {errors.flag && <p className="text-red-500 text-sm mt-1">{errors.flag}</p>}
+        </div>
 
-      <button type="submit" className="bg-blue-600 hover:bg-blue-300 text-white font-semibold py-2 px-8 rounded items-center justify-center w-full text-2xl mt-4">
-        Submit Job country
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-300 text-white font-semibold py-2 px-8 rounded items-center justify-center w-full text-2xl mt-4"
+        >
+          Submit Country Details
+        </button>
+      </form>
+    </div>
   );
 }
 

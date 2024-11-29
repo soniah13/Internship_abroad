@@ -25,6 +25,7 @@ function EmployerJobs() {
         const jobsWithApplications = data.jobs.map(job => ({
           ...job,
           applications: job.applications || [],
+          applicant_count: job.applicant_count || 0,
 
         }))
         setJobData(jobsWithApplications); 
@@ -55,7 +56,7 @@ function EmployerJobs() {
             <div className='flex flex-col'>
             <h3 className='text-2xl' ><span className='text-2xl font-semibold'>Title:</span> {job.job.title}</h3>
             <p className='text-2xl'><span className='text-2xl font-semibold'>City:</span> {job.job.city}</p>
-            <p className='text-2xl'><span className='text-2xl font-semibold'>Number of applications:</span> {job.job.applicant_count || 0}</p>
+            <p className='text-2xl'><span className='text-2xl font-semibold'>Number of applications:</span> {job.job.applicant_count }</p>
             <p className='text-2xl'><span className='text-2xl font-semibold'>Applicants needed:</span> {job.job.max_applications}</p>
             </div>
 

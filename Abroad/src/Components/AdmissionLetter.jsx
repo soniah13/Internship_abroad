@@ -37,8 +37,8 @@ function AdmissionLetter({ onComplete }) {
         onComplete(admissionletterFile); //notify studentdocument of successful upload
         
       } else {
-        console.log('Upload failes:', await response.json());
-        alert('Failed to upload visa');
+        console.log('Upload fails:', await response.json());
+        alert('Failed to upload admission letter');
       }
     } catch(error) {
       console.error('Uploading error', error);

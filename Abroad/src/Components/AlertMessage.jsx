@@ -12,7 +12,7 @@ const AlertMessage = ({ message, type, onClose }) => {
                 <p className="font-semibold">{message}</p>
                 <button
                     onClick={onClose}
-                    className="text-white font-bold bg-transparent hover:bg-white hover:text-black rounded-full p-1"
+                    className=" font-bold bg-transparent text-black rounded-full p-1"
                 >
                     X
                 </button>

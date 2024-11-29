@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ProfileForm from './ProfileForm';
 import ProfileView from './ProfileView';
+import AlertMessage from './AlertMessage';  // Import AlertMessage component
 
 function StudentProfile() {
   const [profileData, setProfileData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const [errors, setErrors]= useState({});
+  const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-  
     const fetchProfile = async () => {
       const response = await fetch('http://127.0.0.1:8000/api/v1/profile/student/', {
         headers: {
@@ -19,6 +21,7 @@ function StudentProfile() {
         const data = await response.json();
         setProfileData(data);
       } else {
+        setErrorMessage('Error fetching profile data');
         console.log('Error fetching profile data');
       }
     };
@@ -33,7 +36,6 @@ function StudentProfile() {
     const formData = new FormData();
 
     Object.entries(editableData).forEach(([key, value]) => {
-      
       formData.append(key, value);
     });
 
@@ -43,35 +45,35 @@ function StudentProfile() {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access')}`
         },
-        body: formData,
+        body: formData
       });
-  
-      if (response.ok) {
-        const data = await response.json();
-        setProfileData(data)
-        setIsEditing(false);
-        setErrors({});
 
+      if (!response.ok) {
+        setErrorMessage('Profile update failed. Please try again.');
       } else {
-        const errorData = await response.json();
-        setErrors(errorData);
+        setIsEditing(false);
+        setSuccessMessage('Profile updated successfully!');
+        setErrorMessage('');
       }
     } catch (error) {
-      console.error("Network error:", error);
-      setErrors({ general: "An error occurred. Please try again." });
+      setErrorMessage('An error occurred while updating your profile');
+      console.log(error);
     }
   };
 
   return (
-    <div>
+    <div className="profile-container">
+      {/* Display Success or Error Alert at the top */}
+      {successMessage && <AlertMessage message={successMessage} type="success" onClose={() => setSuccessMessage('')} />}
+      {errorMessage && <AlertMessage message={errorMessage} type="error" onClose={() => setErrorMessage('')} />}
+      
       {isEditing ? (
         <ProfileForm profileData={profileData} onSubmit={handleSubmit} />
       ) : (
-        <ProfileView profileData={profileData} onEdit={handleEdit} errors={errors}/>
-        
+        <ProfileView profileData={profileData} onEdit={handleEdit} />
       )}
     </div>
   );
 }
 
-export default StudentProfile
+export default StudentProfile;

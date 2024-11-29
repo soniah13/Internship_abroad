@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('documents', DocumentViewSET, basename='documents')
+router.register('applications', ApplicationViewSet, basename='applications')
 
 urlpatterns = [
     path('internships/', internships_list, name='internships_list'),
@@ -14,12 +15,8 @@ urlpatterns = [
     path('profile/employer/', employer_profile, name='employer_profile'),
     path('employer/jobs/', employer_job_list, name='employer_jobs'),
     path('employer/jobs/<int:pk>/', JobRetrieveUpdateDestroy.as_view(), name='preview_id'),
-    path('applications/', ApplicationCreateView.as_view(), name='applications'),
-    path('applications/<int:pk>/', ApplicationsRetrieveUpdateDestroy.as_view(), name='single_applications'),
+    path('applications/details/<int:pk>/', ApplicationsRetrieveUpdateDestroy.as_view(), name='single_applications'),
     path('employer/applications/', EmployerApplicationView.as_view(), name='employer_applications'),
-    path('students/', include(router.urls)),
-    
-    
-    
+    path('students/', include(router.urls)), 
     
 ]
