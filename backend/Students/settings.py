@@ -78,7 +78,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
+    'https://internship-abroad-frontend.onrender.com',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 

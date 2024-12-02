@@ -1,7 +1,7 @@
 {
   "name": "abroad",
   "private": true,
-  "proxy": "http://localhost:5173",
+  "proxy": "https://internship-abroad-frontend.onrender.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
