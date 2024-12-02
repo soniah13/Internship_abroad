@@ -124,7 +124,7 @@ function ApplicationForm() {
     };
     
     return (
-        <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{ backgroundImage: "url(/src/assets/Images/home.jpg)" }}>
+        <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{ backgroundImage: "url(/assets/Images/home.jpg)" }}>
             <div className="absolute inset-0 bg-black opacity-50 "></div>
             <div className='z-10 container mx-auto p-4 sm:p-6 md:p-8 text-base sm:text-lg'>
                 <button onClick={() => navigate(-1)}

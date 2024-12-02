@@ -5,10 +5,10 @@ import { IoIosArrowDropright } from "react-icons/io";
 function AboutUs() {
 
     const testimonials = [
-        {id: 1, name: 'Alicia Johnson', text:'This website made finding an internship abroad easy and fun!', career:'Nurse', picture: '/src/assets/Images/nursing.png', location:'Australia' },
-        {id: 2, name: 'Sarah Leona', text:'I felt supported and confident throughout the entire process.', career:'Engineer', picture: '/src/assets/Images/engineer.png', location:'Sweden' },
-        {id: 3, name: 'Merciline Queen', text:'A one-stop solution for all internship needs. Highly recommended!', career:'Manager', picture: '/src/assets/Images/business.png', location:'South Africa' },
-        {id: 4, name: 'Daniella Samindra', text:'The guidance provided here helped me land my dream internship.', career:'Chef', picture: '/src/assets/Images/chef.png', location: 'Paris' }
+        {id: 1, name: 'Alicia Johnson', text:'This website made finding an internship abroad easy and fun!', career:'Nurse', picture: '/assets/Images/nursing.png', location:'Australia' },
+        {id: 2, name: 'Sarah Leona', text:'I felt supported and confident throughout the entire process.', career:'Engineer', picture: '/assets/Images/engineer.png', location:'Sweden' },
+        {id: 3, name: 'Merciline Queen', text:'A one-stop solution for all internship needs. Highly recommended!', career:'Manager', picture: '/assets/Images/business.png', location:'South Africa' },
+        {id: 4, name: 'Daniella Samindra', text:'The guidance provided here helped me land my dream internship.', career:'Chef', picture: '/assets/Images/chef.png', location: 'Paris' }
     ];
 
     const scrollRef = useRef(null);

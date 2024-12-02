@@ -63,7 +63,7 @@ function ProfileForm({ profileData = {}, onSubmit }) {
   };
 
   return (
-    <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{ backgroundImage: "url(/src/assets/Images/home.jpg)" }}>
+    <div className='relative flex items-center justify-center h-screen bg-cover bg-center' style={{ backgroundImage: "url(/assets/Images/home.jpg)" }}>
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <form onSubmit={handleSubmit} className='z-10 max-w-md w-full bg-white p-8 rounded-lg shadow-lg'>
         <h2 className='text-2xl font-bold mb-6 text-center'> Edit Your Profile</h2>

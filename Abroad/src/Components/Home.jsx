@@ -3,26 +3,26 @@ import React, { useEffect, useState } from 'react'
 
 function Home({}) {
     const flagImages = [
-        '/src/assets/Images/Flags/Algeria.png','/src/assets/Images/Flags/Argentina.png','/src/assets/Images/Flags/Australia.png',
-        '/src/assets/Images/Flags/Austria.png','/src/assets/Images/Flags/Belgium.png', '/src/assets/Images/Flags/Botswana.png',
-        '/src/assets/Images/Flags/Brazil.png','/src/assets/Images/Flags/Cameroon.png', '/src/assets/Images/Flags/Canada.png',
-        '/src/assets/Images/Flags/China.png','/src/assets/Images/Flags/Costa Rica.png','/src/assets/Images/Flags/Denmark.png',
-        '/src/assets/Images/Flags/Egypt.png','/src/assets/Images/Flags/Ethopia.png', '/src/assets/Images/Flags/Finland.png',
-        '/src/assets/Images/Flags/France.png','/src/assets/Images/Flags/Germany.png', '/src/assets/Images/Flags/Ghana.png',
-        '/src/assets/Images/Flags/Honduras.png', '/src/assets/Images/Flags/Iceland.png', '/src/assets/Images/Flags/Indonesia.png',
-        '/src/assets/Images/Flags/Ireland.png','/src/assets/Images/Flags/Israel.png','/src/assets/Images/Flags/Italy.png',
-        '/src/assets/Images/Flags/Japan.png','/src/assets/Images/Flags/Kenya.png', '/src/assets/Images/Flags/Liberia.png',
-        '/src/assets/Images/Flags/Libya.png','/src/assets/Images/Flags/Madagascar.png', '/src/assets/Images/Flags/Malaysia.png',
-        '/src/assets/Images/Flags/Maldives.png','/src/assets/Images/Flags/Mexico.png','/src/assets/Images/Flags/Morocco.png',
-        '/src/assets/Images/Flags/Namibia.png', '/src/assets/Images/Flags/Netherlands.png','/src/assets/Images/Flags/New Zealand.png',
-        '/src/assets/Images/Flags/Norway.png', '/src/assets/Images/Flags/Pakistan.png','/src/assets/Images/Flags/Panama.png',
-        '/src/assets/Images/Flags/Peru.png', '/src/assets/Images/Flags/Qatar.png', '/src/assets/Images/Flags/Rusia.png',
-         '/src/assets/Images/Flags/Rwanda.png', '/src/assets/Images/Flags/Saudia Arabia.png', '/src/assets/Images/Flags/Senegal.png',
-         '/src/assets/Images/Flags/Seychelles.png', '/src/assets/Images/Flags/Singapore.png','/src/assets/Images/Flags/South Africa.png',
-         '/src/assets/Images/Flags/Spain.png','/src/assets/Images/Flags/Sweden.png','/src/assets/Images/Flags/Switzerland.png',
-         '/src/assets/Images/Flags/Tanzania.png', '/src/assets/Images/Flags/Turkey.png','/src/assets/Images/Flags/UK.png',
-         '/src/assets/Images/Flags/USA.png','/src/assets/Images/Flags/Uganda.png', '/src/assets/Images/Flags/Vietnam.png',
-         '/src/assets/Images/Flags/Zambia.png','/src/assets/Images/Flags/Singapore.png','/src/assets/Images/Flags/Hong Kong.png'
+        '/assets/Images/Flags/Algeria.png','/assets/Images/Flags/Argentina.png','/assets/Images/Flags/Australia.png',
+        '/assets/Images/Flags/Austria.png','/assets/Images/Flags/Belgium.png', '/assets/Images/Flags/Botswana.png',
+        '/assets/Images/Flags/Brazil.png','/assets/Images/Flags/Cameroon.png', '/assets/Images/Flags/Canada.png',
+        '/assets/Images/Flags/China.png','/assets/Images/Flags/Costa Rica.png','/assets/Images/Flags/Denmark.png',
+        '/assets/Images/Flags/Egypt.png','/assets/Images/Flags/Ethopia.png', '/assets/Images/Flags/Finland.png',
+        '/assets/Images/Flags/France.png','/assets/Images/Flags/Germany.png', '/assets/Images/Flags/Ghana.png',
+        '/assets/Images/Flags/Honduras.png', '/assets/Images/Flags/Iceland.png', '/assets/Images/Flags/Indonesia.png',
+        '/assets/Images/Flags/Ireland.png','/assets/Images/Flags/Israel.png','/assets/Images/Flags/Italy.png',
+        '/assets/Images/Flags/Japan.png','/assets/Images/Flags/Kenya.png', '/assets/Images/Flags/Liberia.png',
+        '/assets/Images/Flags/Libya.png','/assets/Images/Flags/Madagascar.png', '/assets/Images/Flags/Malaysia.png',
+        '/assets/Images/Flags/Maldives.png','/assets/Images/Flags/Mexico.png','/assets/Images/Flags/Morocco.png',
+        '/assets/Images/Flags/Namibia.png', '/assets/Images/Flags/Netherlands.png','/assets/Images/Flags/New Zealand.png',
+        '/assets/Images/Flags/Norway.png', '/assets/Images/Flags/Pakistan.png','/assets/Images/Flags/Panama.png',
+        '/assets/Images/Flags/Peru.png', '/assets/Images/Flags/Qatar.png', '/assets/Images/Flags/Rusia.png',
+         '/assets/Images/Flags/Rwanda.png', '/assets/Images/Flags/Saudia Arabia.png', '/assets/Images/Flags/Senegal.png',
+         '/assets/Images/Flags/Seychelles.png', '/assets/Images/Flags/Singapore.png','/assets/Images/Flags/South Africa.png',
+         '/assets/Images/Flags/Spain.png','/assets/Images/Flags/Sweden.png','/assets/Images/Flags/Switzerland.png',
+         '/assets/Images/Flags/Tanzania.png', '/assets/Images/Flags/Turkey.png','/assets/Images/Flags/UK.png',
+         '/assets/Images/Flags/USA.png','/assets/Images/Flags/Uganda.png', '/assets/Images/Flags/Vietnam.png',
+         '/assets/Images/Flags/Zambia.png','/assets/Images/Flags/Singapore.png','/assets/Images/Flags/Hong Kong.png'
       ];
       
 
@@ -78,7 +78,7 @@ function Home({}) {
   
   
       return (
-          <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/src/assets/Images/lost.png)' }}>
+          <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/assets/Images/lost.png)' }}>
               <div className="absolute inset-0 bg-black opacity-50"></div>
               <div className="flex flex-col md:flex-row justify-center items-center h-1/2 p-4 md:p-48 space-y-1 md:space-y-0 md:space-x-4">
                   <div className="grid grid-cols-6 md:grid-cols-6 gap-x-0 gap-y-0 justify-center md:w-1/2">
