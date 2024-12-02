@@ -12,12 +12,12 @@ function JobsDetails() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const internshipRes = await fetch(`http://127.0.0.1:8000/api/v1/internships/${id}`);
+                const internshipRes = await fetch(`https://internship-abroad-backend.onrender.com/api/v1/internships/${id}`);
                 if (!internshipRes.ok) throw new Error('Could not fetch the internship');
                 const internshipData = await internshipRes.json();
                 setInternship(internshipData);
 
-                const countryRes = await fetch(`http://127.0.0.1:8000/api/v1/countries/${internshipData.country}`);
+                const countryRes = await fetch(`https://internship-abroad-backend.onrender.com/api/v1/countries/${internshipData.country}`);
                 if (!countryRes.ok) throw new Error('Could not fetch the country details');
                 const countryData = await countryRes.json();
                 setCountryDetails(countryData);

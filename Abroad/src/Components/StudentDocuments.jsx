@@ -49,7 +49,7 @@ function StudentDocuments() {
         formData.append(formType, file);
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/students/documents/', {
+            const response = await fetch('https://internship-abroad-backend.onrender.com/api/v1/students/documents/', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,
@@ -92,7 +92,7 @@ function StudentDocuments() {
         if (!documentToDelete) return;
 
         try {
-            await fetch(`http://127.0.0.1:8000/api/v1/students/documents/${documentToDelete}`, {
+            await fetch(`https://internship-abroad-backend.onrender.com/api/v1/students/documents/${documentToDelete}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('access')}`,

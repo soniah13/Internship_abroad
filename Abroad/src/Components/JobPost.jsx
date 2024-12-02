@@ -63,7 +63,7 @@ function JobPost({ countryName, countryId }) {
     });
 
     try {
-      const internshipsResponse = await fetch('http://127.0.0.1:8000/api/v1/internships/', {
+      const internshipsResponse = await fetch('https://internship-abroad-backend.onrender.com/api/v1/internships/', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access')}`,
@@ -72,7 +72,7 @@ function JobPost({ countryName, countryId }) {
       });
 
       if (internshipsResponse.ok) {
-        const employerJobResponse = await fetch("http://127.0.0.1:8000/api/v1/employer/jobs/", {
+        const employerJobResponse = await fetch("https://internship-abroad-backend.onrender.com/api/v1/employer/jobs/", {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access')}`

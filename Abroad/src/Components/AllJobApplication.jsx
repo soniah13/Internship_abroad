@@ -10,7 +10,7 @@ function AllJobApplication() {
     useEffect(() => {
         async function fetchApplications() {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/v1/employer/applications/?internship=${jobId}`, {
+                const response = await fetch(`https://internship-abroad-backend.onrender.com/api/v1/employer/applications/?internship=${jobId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('access')}`,
                     },

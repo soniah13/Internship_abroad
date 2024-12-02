@@ -12,7 +12,7 @@ function Jobs({internships = [], setInternships}) {
     useEffect (() => {
         const fetchInternships = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/v1/internships/');
+                const response = await fetch('https://internship-abroad-backend.onrender.com/api/v1/internships/');
                 if (!response.ok) throw new Error('Network response was not okay');
                 const data = await response.json();
                 setInternships(data);
@@ -24,7 +24,7 @@ function Jobs({internships = [], setInternships}) {
 
         const fetchCountries = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/v1/countries/');
+                const response = await fetch('https://internship-abroad-backend.onrender.com/api/v1/countries/');
                 if (!response.ok) throw new Error('Network response was not okay');
                 const data = await response.json();
                 setCountries(data);

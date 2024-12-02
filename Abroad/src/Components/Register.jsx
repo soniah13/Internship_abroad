@@ -24,7 +24,7 @@ function Register() {
         }
 
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/user/register/", {
+            const res = await fetch("https://internship-abroad-backend.onrender.com/api/user/register/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

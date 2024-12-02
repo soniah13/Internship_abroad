@@ -24,7 +24,7 @@ function ApplicationForm() {
     useEffect(() => {
         async function fetchInternshipDetails() {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/v1/internships/${id}/`, {
+                const response = await fetch(`https://internship-abroad-backend.onrender.com/api/v1/internships/${id}/`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('access')}`,
                     },
@@ -94,7 +94,7 @@ function ApplicationForm() {
         }
         console.log(formData)
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/students/applications/', {
+            const response = await fetch('https://internship-abroad-backend.onrender.com/api/v1/students/applications/', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access')}`,
