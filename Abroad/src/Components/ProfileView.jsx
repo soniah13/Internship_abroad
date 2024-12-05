@@ -64,7 +64,7 @@ function ProfileView({profileData = {}, onEdit}) {
 
           <div>
             <p> 
-          <strong> Something intresting About {profileData.username || 'User'}:</strong> </p>
+          <strong> Something interesting About {profileData.username || 'User'}:</strong> </p>
           <p className='text-gray-900'> She is ,
             { profileData.bio || 'There is nothing to read here.'}
           </p>

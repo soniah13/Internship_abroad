@@ -7,7 +7,7 @@ function Home({}) {
         '/assets/Images/Flags/Austria.png','/assets/Images/Flags/Belgium.png', '/assets/Images/Flags/Botswana.png',
         '/assets/Images/Flags/Brazil.png','/assets/Images/Flags/Cameroon.png', '/assets/Images/Flags/Canada.png',
         '/assets/Images/Flags/China.png','/assets/Images/Flags/Costa Rica.png','/assets/Images/Flags/Denmark.png',
-        '/assets/Images/Flags/Egypt.png','/assets/Images/Flags/Ethopia.png', '/assets/Images/Flags/Finland.png',
+        '/assets/Images/Flags/Egypt.png','/assets/Images/Flags/Ethiopia.png', '/assets/Images/Flags/Finland.png',
         '/assets/Images/Flags/France.png','/assets/Images/Flags/Germany.png', '/assets/Images/Flags/Ghana.png',
         '/assets/Images/Flags/Honduras.png', '/assets/Images/Flags/Iceland.png', '/assets/Images/Flags/Indonesia.png',
         '/assets/Images/Flags/Ireland.png','/assets/Images/Flags/Israel.png','/assets/Images/Flags/Italy.png',
