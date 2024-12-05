@@ -228,6 +228,7 @@ function JobPost({ countryName, countryId }) {
         type="file" name="company_logo" onChange={handleFileChange}
         className="w-full p-3 mb-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
       />
+      <p className='p-2'>please upload company_logo here</p>
       {errors.company_logo && <p className="text-red-500 mb-4">{errors.company_logo}</p>}
 
       <button type="submit" className="bg-blue-600 hover:bg-blue-300 text-white font-semibold py-2 px-8 rounded items-center justify-center w-full text-2xl mt-4">
