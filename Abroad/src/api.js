@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ACCESS_TOKEN } from './constants';
 
-const apiURL = "https://internship-abroad.onrender.com"
+const apiURL = "https://internship-abroad-backend.onrender.com/"
 
 
 const api = axios.create({
