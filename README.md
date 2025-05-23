@@ -57,7 +57,7 @@ cd internship-abroad
 ### 2. Setup Frontend (React)
 
 ```bash
-cd frontend
+cd Abroad
 npm install
 ```
 
